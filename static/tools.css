@@ -1,0 +1,7 @@
+.toolsBlock{
+  text-align: center;
+}
+.toolsBlock button {
+  margin: auto;
+  display: block;
+}

@@ -1,0 +1,43 @@
+.tabs-component-tabs>li:first-child{
+  float: left;
+}
+.tabs-component-tab{
+  position: relative;
+  margin: 0 20px;
+  max-width: 200px;
+  overflow: hidden;
+
+}
+.tabs-component-tab a{
+  white-space: nowrap;
+  padding-right: 10px;
+}
+
+/* close block */
+.close {
+  position: absolute;
+  right: -4px;
+  top: -3px;
+  width: 15px;
+  height: 15px;
+  opacity: 0.3;
+}
+.close:hover {
+  opacity: 1;
+}
+.close:before, .close:after {
+  position: absolute;
+  left: 6px;
+  top:2px;
+  content: ' ';
+  height: 10px;
+  width: 2px;
+  background-color: #333;
+}
+.close:before {
+  transform: rotate(45deg);
+}
+.close:after {
+  transform: rotate(-45deg);
+}
+/* close block */
