@@ -31,6 +31,7 @@
   import Vue from 'vue'
   import Tab from './Tab'
   import expiringStorage from './expiringStorage'
+  import tabsStorage from './tabsStorage'
 
   export default {
     name: 'Tabs',
@@ -60,7 +61,7 @@
       },
     },
     created() {
-      this.tabs = this.$children;
+
     },
     mounted() {
       window.addEventListener('hashchange', () => this.selectTab(window.location.hash));
@@ -80,6 +81,16 @@
       if (this.tabs.length) {
         this.selectTab(this.tabs[0].hash);
       }
+      if(document.getElementById('codeList') != undefined){
+        let tabsHashes = tabsStorage.getArray()
+        if(tabsHashes != null)
+        {
+          for (let i=0;i<tabsHashes.length;i++){
+            let hash = '#'+tabsHashes[i];
+            this.createTab(tabsStorage.get(hash, 'id'), tabsStorage.get(hash, 'name'), tabsStorage.get(hash, 'code'))
+          }
+        }
+      }
     },
     methods: {
       findTab(hash) {
@@ -92,6 +103,7 @@
             if (localStorage.getItem(this.tabs[i].hash)) {
                 localStorage.removeItem(this.tabs[i].hash)
             }
+            tabsStorage.removeToArray((this.tabs[i].hash).replace('#',''))
             this.tabs.splice(i, 1)
           }
         }
@@ -176,6 +188,26 @@
         document.getElementById('codeList').appendChild(el.$el)
         this.tabs.push(instance)
         instance.$mount()
+        this.selectTab(instance.hash)
+
+        tabsStorage.set(instance.hash, {'id': instance.id,'name': instance.name, 'code':instance.code})
+        tabsStorage.addToArray(instance.hash.replace('#',''))
+      },
+      createTab(id, name, code){
+        this.tabCounter++;
+        let ComponentClass = Vue.extend(Tab)
+        let instance = new ComponentClass({
+          propsData: {
+            id: id,
+            name: name,
+            code: code
+          }
+        })
+
+        let el = instance.$mount()
+        this.tabs.push(instance)
+        instance.$mount()
+        document.getElementById('codeList').appendChild(el.$el)
         this.selectTab(instance.hash)
       }
     }

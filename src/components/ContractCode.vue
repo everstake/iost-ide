@@ -3,6 +3,7 @@
 </template>
 
 <script>
+  import tabsStorage from './Tabs/tabsStorage'
   import 'codemirror/lib/codemirror.css'
   // import 'codemirror/theme/monokai.css'
 
@@ -75,9 +76,7 @@
     },
     methods: {
       onCmInput(newCode) {
-        //const parsed = JSON.stringify(newCode);
-        localStorage.setItem(this.tabHash, newCode);
-        console.log(localStorage.getItem(this.tabHash))
+        tabsStorage.setCode(this.tabHash, newCode)
       }
     },
     components: {
