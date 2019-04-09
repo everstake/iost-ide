@@ -1,7 +1,21 @@
-.toolsBlock{
+.toolsBlock {
   text-align: center;
+  color: #fff;
 }
 .toolsBlock button {
-  margin: auto;
+  margin: 10px auto;
+  padding: 10px 0;
+  min-width: 175px;
   display: block;
+  background: #212121;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  color: #ececec;
+  cursor: pointer;
+  transition: .3s ease-in-out;
+}
+.toolsBlock button:hover {
+  background: #000;
+  color: #fff;
 }

@@ -3,24 +3,26 @@
   text-align:left;
   padding:15px;
   overflow:hidden;
-  background:#eee;
-  border:1px solid #ccc
+  background:rgb(60, 60, 60);
+  border:1px solid #767676;
 }
 .custom-resizer>.multipane-resizer{margin:0;left:0;position:relative}
+
 .custom-resizer>.multipane-resizer:before{
-  display:block;
-  content:"";
-  width:3px;
-  height:40px;
-  position:absolute;
-  top:50%;
-  left:50%;
-  margin-top:-20px;
-  margin-left:-3px;
-  border-left:1px solid #ccc;
-  border-right:1px solid #ccc
+  display: block;
+  content: "";
+  width: 2px;
+  height: 40px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -20px;
+  margin-left: -2px;
+  border-left: 1px solid #ececec;
+  border-right: 1px solid #ececec;
+  transition: .3s ease-in-out;
 }
-.custom-resizer>.multipane-resizer:hover:before{border-color:#999}
+.custom-resizer>.multipane-resizer:hover:before{border-color:#b5b5b5;}
 
 .multipane{display:flex}
 .multipane.layout-h{flex-direction:column}
@@ -29,13 +31,14 @@
 .multipane-resizer{display:block;position:relative;z-index:2}
 
 .layout-v>.multipane-resizer{
-  width:15px;
-  height:100%;
+  width: 8px;
+  height: 100%;
   /*margin-left:-10px;*/
   /*left:5px;*/
-  cursor:col-resize;
+  cursor: col-resize;
+  background: rgb(10, 10, 10);
 }
 
-.horizontal-panes{width:100%;height:600px;border:1px solid #ccc}
-.horizontal-panes>.pane{text-align:left;padding:15px;overflow:hidden;background:#eee}
-.horizontal-panes>.pane~.pane{border-top:1px solid #ccc}
+.horizontal-panes{width: 100%;height: 600px;border: 1px solid #ccc}
+.horizontal-panes>.pane{text-align: left; padding:15px; overflow: hidden;background: #eee}
+.horizontal-panes>.pane~.pane{border-top: 1px solid #ccc}

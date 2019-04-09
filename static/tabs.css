@@ -1,14 +1,54 @@
-.tabs-component-tabs>li:first-child{
-  float: left;
+.tabs-component li {
+  margin: 0;
+  color: rgb(236,236,236);
+  cursor: pointer;
 }
-.tabs-component-tab{
+.tabs-component li.tabs-component-tab:hover a {
+  color: #fff;
+}
+.tabs-component li.tabs-component-tab:hover .close {
+  opacity: 1;
+}
+.tabs-component-tabs>li:first-child {
+  margin-right: 30px;
+  float: left;
+  height: 28px;
+  display: flex;
+  align-items: center;
+}
+.tabs-component li.tabs-component-tab {
+  background: #212121;
+  padding: 5px 14px;
+  border-radius: 6px 6px 0 0;
+  border: 1px solid #585858;
+  border-right: 0;
+  border-bottom: 0;
+}
+.tabs-component li.tabs-component-tab:last-child {
+  border-right: 1px solid #585858;
+}
+.tabs-component li.is-active {
+  background: #000;
+}
+.tabs-component li.is-active .close {
+  opacity: 1;
+}
+.tabs-component li.tabs-component-tab a {
+  color: #b3b3b3;
+  transition: .3s ease-in-out;
+}
+.tabs-component li.is-active a {
+  color: #fff;
+}
+
+.tabs-component-tab {
   position: relative;
   margin: 0 20px;
   max-width: 200px;
-  overflow: hidden;
+  /* overflow: hidden; */
 
 }
-.tabs-component-tab a{
+.tabs-component-tab a {
   white-space: nowrap;
   padding-right: 10px;
 }
@@ -16,23 +56,21 @@
 /* close block */
 .close {
   position: absolute;
-  right: -4px;
-  top: -3px;
+  right: 1px;
+  top: 1px;
   width: 15px;
   height: 15px;
   opacity: 0.3;
-}
-.close:hover {
-  opacity: 1;
+  transition: .3s ease-in-out;
 }
 .close:before, .close:after {
   position: absolute;
-  left: 6px;
-  top:2px;
+  left: 5px;
+  top: 5px;
   content: ' ';
   height: 10px;
   width: 2px;
-  background-color: #333;
+  background-color:rgb(236,236,236);
 }
 .close:before {
   transform: rotate(45deg);

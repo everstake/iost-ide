@@ -2,13 +2,19 @@ body{
   width: 98%;
   height: 100%;
   position: fixed;
+  background: #2c2e31;
 }
 h1, h2 {
   font-weight: normal;
 }
+.title {
+  text-align: left;
+  color: #fff;
+}
 ul {
-  list-style-type: none;
+  margin: 0;
   padding: 0;
+  list-style-type: none;
 }
 li {
   display: inline-block;
@@ -16,13 +22,14 @@ li {
 }
 a {
   color: #42b983;
+  text-decoration: none;
 }
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: #333;
   height: 98%;
   display: block;
 }
@@ -30,8 +37,9 @@ a {
   margin-top: 10px;
   padding: 15px;
   overflow: hidden;
-  background: #eee;
-  border: 1px solid #ccc;
+  background: rgb(60,60,60);
+  border: 1px solid #767676;
+  color: #ececec;
   height: 9%;
 }
 section.ide {
