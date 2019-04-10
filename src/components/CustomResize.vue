@@ -2,13 +2,13 @@
   <Multipane class="custom-resizer" layout="vertical">
     <div class="pane" :style="{ minWidth: '50%', width: '70%', maxWidth: '80%' }">
       <div>
-        <Tabs></Tabs>
+        <Tabs ref="tabs"></Tabs>
       </div>
     </div>
 
     <multipane-resizer></multipane-resizer>
     <div class="pane" :style="{ flexGrow: 1 }">
-        <ToolsPanel></ToolsPanel>
+        <ToolsPanel ref="tools"></ToolsPanel>
     </div>
   </Multipane>
 </template>

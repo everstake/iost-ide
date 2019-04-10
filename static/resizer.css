@@ -25,7 +25,7 @@
 .multipane{display:flex}
 .multipane.layout-h{flex-direction:column}
 .multipane.layout-v{flex-direction:row}
-.multipane>div{position:relative;z-index:1}
+.multipane>div{position:relative;}
 .multipane-resizer{display:block;position:relative;z-index:2}
 
 .layout-v>.multipane-resizer{

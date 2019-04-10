@@ -21,7 +21,8 @@
       prefix: { default: '' },
       suffix: { default: '' },
       isDisabled:{ default: false },
-      code: {default: ''}
+      code: {default: ''},
+      modal: { default: false }
     },
     data: () => ({
       isActive: false,

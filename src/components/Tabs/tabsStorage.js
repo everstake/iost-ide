@@ -58,5 +58,23 @@ class TabsStorage {
       localStorage.setItem(key, JSON.stringify(data))
     }
   }
+
+  setName(key, name){
+    if(this.is(key)){
+      let data = JSON.parse(
+        localStorage.getItem(key)
+      )
+      data.name = name
+      localStorage.setItem(key, JSON.stringify(data))
+    }
+  }
+
+  setActiveTab(hash){
+    localStorage.setItem('activeTab', JSON.stringify(hash))
+  }
+
+  getActiveTab(key){
+    localStorage.getItem('activeTab')
+  }
 }
 export default new TabsStorage()

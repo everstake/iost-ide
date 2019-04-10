@@ -14,11 +14,18 @@
            :aria-controls="tab.hash"
            :aria-selected="tab.isActive"
            @click="selectTab(tab.hash, $event)"
+           @dblclick="changeName(tab.hash)"
            :href="tab.hash"
            class="tabs-component-tab-a"
            role="tab"
         ></a>
         <span v-on:click="deleteTab(tab.hash)" class="close"></span>
+        <ModalView v-if="tab.modal"
+                   @close="tab.modal = false"
+                   :id="tab.id"
+                   :name="tab.name"
+                   :hash="tab.hash"
+        ></ModalView>
       </li>
     </ul>
     <div id="codeList" class="tabs-component-panels">
@@ -32,6 +39,7 @@
   import Tab from './Tab'
   import expiringStorage from './expiringStorage'
   import tabsStorage from './tabsStorage'
+  import ModalView from '../ModalView'
 
   export default {
     name: 'Tabs',
@@ -58,7 +66,7 @@
     computed: {
       storageKey() {
         return `vue-tabs-component.cache.${window.location.host}${window.location.pathname}`;
-      },
+      }
     },
     created() {
 
@@ -109,6 +117,7 @@
         }
       },
       selectTab(selectedTabHash, event) {
+
         // See if we should store the hash in the url fragment.
         if (event && !this.options.useUrlFragment) {
           event.preventDefault();
@@ -133,6 +142,25 @@
         this.activeTabIndex = this.getTabIndex(selectedTabHash);
         this.lastActiveTabHash = this.activeTabHash = selectedTab.hash;
         expiringStorage.set(this.storageKey, selectedTab.hash, this.cacheLifetime);
+
+        //change list of tabs
+        // let select = document.getElementById('contracts-list')
+        // if(select != null){
+        //   for(let i=0;i<select.options.length;i++) {
+        //     if(select.options[i].value == selectedTab.hash){
+        //       select.options.selectedIndex = i
+        //     }
+        //   }
+        // }
+
+      },
+      changeName(selectedTabHash) {
+        for(let i=0;i<this.tabs.length;i++)
+        {
+          if(this.tabs[i].hash == selectedTabHash){
+            this.tabs[i].modal = true
+          }
+        }
       },
       setTabVisible(hash, visible) {
         const tab = this.findTab(hash);
@@ -181,7 +209,8 @@
           propsData: {
             id: 'Tab'+(this.tabCounter),
             name: 'New Tab '+(this.tabCounter),
-            code: 'my code'
+            code: 'my code',
+            modal: false
           }
         })
         let el = instance.$mount()
@@ -190,7 +219,7 @@
         instance.$mount()
         this.selectTab(instance.hash)
 
-        tabsStorage.set(instance.hash, {'id': instance.id,'name': instance.name, 'code':instance.code})
+        tabsStorage.set(instance.hash, {'id': instance.id,'name': instance.name, 'code':instance.code, modal:false})
         tabsStorage.addToArray(instance.hash.replace('#',''))
       },
       createTab(id, name, code){
@@ -200,7 +229,8 @@
           propsData: {
             id: id,
             name: name,
-            code: code
+            code: code,
+            modal: false
           }
         })
 
@@ -210,6 +240,9 @@
         document.getElementById('codeList').appendChild(el.$el)
         this.selectTab(instance.hash)
       }
+    },
+    components: {
+      ModalView
     }
   };
 </script>

@@ -42,3 +42,6 @@ section.ide {
 div.resize-h-body {
   height: 85%;
 }
+.CodeMirror {
+  height: 667px!important;
+}

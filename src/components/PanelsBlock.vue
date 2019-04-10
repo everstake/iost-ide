@@ -8,7 +8,7 @@
       </div>
       <CustomResize></CustomResize>
     </div>
-    <CompilerPanel></CompilerPanel>
+    <CompilerPanel ref="compiler"></CompilerPanel>
   </section>
 </template>
 

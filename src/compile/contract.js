@@ -1,7 +1,11 @@
 //'use strict';
-
+var esprima = require('esprima')
+var escodegen = require('escodegen')
 class Compiler {
-  esprima = require('esprima/dist/esprima.js');
+  // esprima = require('esprima/dist/esprima.js');
+  // escodegen = require('escodegen/escodegen.js');
+
+  esprima = require('esprima')
   escodegen = require('escodegen/escodegen.js');
 
   lang = "javascript";
@@ -62,20 +66,20 @@ class Compiler {
 
   genAbiArr(stat, comments) {
     let abiArr = [];
-    if (!isClassDecl(stat) || stat.body.type !== "ClassBody") {
+    if (!this.isClassDecl(stat) || stat.body.type !== "ClassBody") {
       throw new Error("invalid statement for generate abi. stat = " + stat);
       return null;
     }
     let initFound = false;
     let lastPos = stat.body.range[0];
     for (let def of stat.body.body) {
-      if (def.type === "MethodDefinition" && isPublicMethod(def)) {
+      if (def.type === "MethodDefinition" && this.isPublicMethod(def)) {
         if (def.key.name === "constructor") {
           throw new Error("smart contract class shouldn't contain constructor method!");
         } else if (def.key.name === "init") {
           initFound = true;
         } else {
-          abiArr.push(genAbi(def, lastPos, comments));
+          abiArr.push(this.genAbi(def, lastPos, comments));
           lastPos = def.range[1];
         }
       }
@@ -165,12 +169,12 @@ class Compiler {
   }
 
   traverseOperator(node, pnode) {
-    node = processOperator(node, pnode);
+    node = this.processOperator(node, pnode);
     for (let key in node) {
       if (node.hasOwnProperty(key)) {
         let child = node[key];
         if (typeof child === 'object' && child !== null) {
-          node[key] = traverseOperator(child, node);
+          node[key] = this.traverseOperator(child, node);
         }
       }
     }
@@ -178,61 +182,53 @@ class Compiler {
   }
 
   handleOperator(ast) {
-    ast = traverseOperator(ast);
+    ast = this.traverseOperator(ast);
     // generate source from ast
     return escodegen.generate(ast);
   }
 
   processContract(source) {
-    console.log(source.toString());
-    //const source = fs.readFileSync(file);
+    if (source === undefined) {
+        throw new Error("invalid file content. Is " + file + " exists?")
+    }
 
-    // if (source === undefined) {
-    //     throw new Error("invalid file content. Is " + file + " exists?")
-    // }
-    //
-    // let ast = esprima.parseModule(source.toString(), {
-    //       range: true,
-    //       loc: false,
-    //       comment: true,
-    //       tokens: true
-    //   });
-    //
-    //   let abiArr = [];
-    //   if (!ast || ast === null || !ast.body || ast.body === null || ast.body.length === 0) {
-    //       throw new Error("invalid source! ast = " + ast);
-    //   }
-    //
-    //   checkInvalidKeyword(ast.tokens);
-    //   // checkOperator(ast.tokens);
-    //   let newSource = "'use strict';\n" + handleOperator(ast);
-    //
-    //   let className;
-    //   for (let stat of ast.body) {
-    //       if (isClassDecl(stat)) {
-    //       }
-    //       else if (stat.type === "ExpressionStatement" && isExport(stat.expression)) {
-    //           className = getExportName(stat.expression);
-    //       }
-    //   }
-    //   for (let stat of ast.body) {
-    //       if (isClassDecl(stat) && stat.id.type === "Identifier" && stat.id.name === className) {
-    //           abiArr = genAbiArr(stat, ast.comments);
-    //       }
-    //   }
-    //
-    //   let abi = {};
-    //   abi["lang"] = lang;
-    //   abi["version"] = version;
-    //   abi["abi"] = abiArr;
-    //   let abiStr = JSON.stringify(abi, null, 4);
-    //
-    //   fs.writeFile(file + ".abi", abiStr, function(err) {
-    //       if(err) {
-    //           return console.log(err);
-    //       }
-    //       console.log("The new abi file was saved as " + file + ".abi");
-    //   });
+    let ast = esprima.parseModule(source.toString(), {
+        range: true,
+        loc: false,
+        comment: true,
+        tokens: true
+    });
+    let abiArr = [];
+    if (!ast || ast === null || !ast.body || ast.body === null || ast.body.length === 0) {
+        throw new Error("invalid source! ast = " + ast);
+    }
+
+    this.checkInvalidKeyword(ast.tokens);
+    //this.checkOperator(ast.tokens);
+
+    let newSource = "'use strict';\n" + this.handleOperator(ast);
+
+    let className;
+    for (let stat of ast.body) {
+        if (this.isClassDecl(stat)) {
+        }
+        else if (stat.type === "ExpressionStatement" && this.isExport(stat.expression)) {
+            className = this.getExportName(stat.expression);
+        }
+    }
+
+    for (let stat of ast.body) {
+        if (this.isClassDecl(stat) && stat.id.type === "Identifier" && stat.id.name === className) {
+            abiArr = this.genAbiArr(stat, ast.comments);
+        }
+    }
+
+    let abi = {};
+    abi['lang'] = this.lang;
+    abi['version'] = this.version;
+    abi['abi'] = abiArr;
+    let abiStr = JSON.stringify(abi, null, 0);
+    return abiStr;
   }
 }
 
