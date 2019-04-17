@@ -5,9 +5,10 @@ import App from './App'
 Vue.config.productionTip = false
 
 
-// Vue.component('tabs', Tabs)
-// Vue.component('tab', Tab)
+import {Tabs, Tab} from 'vue-tabs-component';
 
+Vue.component('tabs', Tabs);
+Vue.component('tab', Tab);
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

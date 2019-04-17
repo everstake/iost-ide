@@ -1,25 +1,31 @@
 <template>
-  <section class="ide" layout="horizontal">
-    <div class="resize-h-body pane">
-      <div class="columns">
-        <div class="column">
-          <h2 class="title">IDE</h2>
-        </div>
+  <section class="ide">
+    <HorizontalPane>
+      <div class="resize-h-body h-pane" :style="{minHeight:'60%', maxHeight: '90%' }">
+        <MainPanel></MainPanel>
       </div>
-      <CustomResize></CustomResize>
-    </div>
-    <CompilerPanel ref="compiler"></CompilerPanel>
+      <MultipaneResizer></MultipaneResizer>
+      <div class="h-pane" :style="{ flexGrow: 1, maxHeight: '15%', minHeight: '5%' }">
+        <CompilerPanel ref="compiler"></CompilerPanel>
+      </div>
+    </HorizontalPane>
   </section>
 </template>
 
 <script>
-const CustomResize = () => import('./CustomResize')
+const MainPanel = () => import('./MainPanel')
 const CompilerPanel = () => import('./CompilerPanel')
+
+const MultipaneResizer = () => import('./resizer/h-multipane-resizer')
+
+import HorizontalPane from './resizer/HorizontalPane'
 
 export default {
   name: 'PanelsBlock',
   components: {
-    CustomResize,
+    MainPanel,
+    MultipaneResizer,
+    HorizontalPane,
     CompilerPanel
   }
 }

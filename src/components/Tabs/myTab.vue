@@ -1,11 +1,11 @@
 <template>
   <section v-show="isActive"
            :aria-hidden="! isActive"
-           class="tabs-component-panel"
+           class="tabs-component-panel h100"
            :id="computedId"
            role="tabpanel"
   >
-    <div>
+    <div class="h100">
       <ContractCode :tabHash="this.hash" :contractCode="this.code" ></ContractCode>
     </div>
   </section>
@@ -14,7 +14,7 @@
 <script>
   import ContractCode from '../ContractCode'
   export default {
-    name: 'Tab',
+    name: 'myTab',
     props: {
       id: { default: null },
       name: { required: true },

@@ -1,48 +1,56 @@
 <template>
-  <div>
-    <select v-model="selected" name="list-contract" @change="onSelected(selected)" id="contracts-list">
-      <option v-for="tab in tabs" v-bind:value="tab.value" >{{tab.text}}</option>
-    </select>
+  <div class="selectBox">
+    <dropdown :options="arrayOfObjects" :selected="object" v-on:updateOption="methodToRunOnSelect"></dropdown>
   </div>
 </template>
 <script>
   import tabsStorage from './Tabs/tabsStorage'
   import expiringStorage from './Tabs/expiringStorage'
+  import dropdown from './Dropdown'
+
   export default {
     name: 'SelectContract',
     data() {
       return {
-        selected: ''
+        object: {
+          name: 'Object Name',
+          value: null
+        }
       }
     },
     created(){
-      this.selected = expiringStorage.get(this.storageKey)
+      this.object.name = 'Choose Contract'
     },
     mounted(){
-      if(expiringStorage.get(this.storageKey) != this.selected)
-        this.selected = expiringStorage.get(this.storageKey)
+      if(expiringStorage.get(this.storageKey) != this.object.name){
+        this.object.value = expiringStorage.get(this.storageKey)
+      }
     },
     computed: {
       storageKey() {
         return `vue-tabs-component.cache.${window.location.host}${window.location.pathname}`;
       },
-      tabs: function(){
+      arrayOfObjects: function(){
         let t = []
         let hashList = tabsStorage.getArray()
-        for(let i=0;i<hashList.length;i++){
+        for(let i=0;i<hashList.length;i++) {
           t.push({
-            text:tabsStorage.get('#'+hashList[i],'name'),
+            name:tabsStorage.get('#'+hashList[i],'name'),
             value:'#'+hashList[i],
           })
         }
         return t
-      },
+      }
     },
     methods: {
-      onSelected(e){
-          document.querySelectorAll("a[href='"+this.selected+"']")[0].click()
-          this.$parent.changeFile(this.selected)
+      methodToRunOnSelect(e) {
+          this.object = e;
+          document.querySelectorAll("a[href='"+e.value+"']")[0].click()
+          this.$parent.changeFile(e.value)
         }
-    }
+    },
+    components: {
+      'dropdown': dropdown,
+    },
   }
 </script>

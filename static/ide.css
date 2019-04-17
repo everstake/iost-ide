@@ -17,6 +17,9 @@ li {
 a {
   color: #42b983;
 }
+.h100{height: 100%}
+.h10{height: 10%}
+.h90{height: 90%}
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -29,12 +32,12 @@ a {
   text-align: center;
 }
 .compilerBlock{
-  margin-top: 10px;
+  margin: 12px;
   padding: 15px;
   overflow: hidden;
   background: #eee;
   border: 1px solid #ccc;
-  height: 9%;
+  height: 100%;
 }
 section.ide {
   height: 100%;
@@ -42,6 +45,58 @@ section.ide {
 div.resize-h-body {
   height: 85%;
 }
-.CodeMirror {
-  height: 667px!important;
+.tabs-component-panel .CodeMirror {
+  height: 100%!important;
+}
+.tabs-component-tabs{
+  margin: 0;
+  padding: 1%;
+  height: 4%;
+}
+.bw{
+  border: 1px solid white;
+}
+.pd10{
+  padding: 10px;
+}
+.mt10{
+  margin-top: 10px;
+}
+.button-deploy{
+  margin: 0 10px;
+}
+.contract-account{
+  margin-top: 5px;
+  width: 90%;
+}
+.methodInfoLine{
+  list-style: none outside none;
+  padding: 0px;
+  margin: 0px;
+}
+.methodInfoLine li{
+  width: 90%;
+  /*border-bottom: 1px solid gray;*/
+  padding: 5px 0;
+  margin: 0px;
+}
+.methodInfoLine li button {
+  float: right;
+  margin: 5px 0px;
+  padding: 0px;
+}
+.methodInfoLine li input {
+  width: 99%;
+  margin-top: 5px;
+  margin: 5px 0 0 0;
+  display: inherit;
+  padding: 0;
+}
+.methodInfoLine li div{
+  float: left;
+  width: 100%;
+  display: inline-block;
+}
+.CodeMirror-gutters{
+  z-index: 0;
 }

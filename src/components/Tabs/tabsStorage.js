@@ -42,7 +42,8 @@ class TabsStorage {
     if (!cached) {
       return null
     }
-    return cached[value]
+    if (cached[value]!= undefined)
+      return cached[value]
   }
 
   set (key, data){

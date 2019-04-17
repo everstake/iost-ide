@@ -1,5 +1,5 @@
 <template>
-  <codemirror :code="contractCode" :options="options"  @input="onCmInput" ></codemirror>
+  <codemirror class="h100" :code="contractCode" :options="options"  @input="onCmInput" ></codemirror>
 </template>
 
 <script>

@@ -1,5 +1,5 @@
 <template>
-  <div class="tabs-component">
+  <div class="tabs-component h100">
     <ul role="tablist" class="tabs-component-tabs">
       <li @click="onClick">+</li>
       <li
@@ -28,7 +28,7 @@
         ></ModalView>
       </li>
     </ul>
-    <div id="codeList" class="tabs-component-panels">
+    <div id="codeList" class="tabs-component-panels h90">
       <slot/>
     </div>
   </div>
@@ -36,13 +36,13 @@
 
 <script>
   import Vue from 'vue'
-  import Tab from './Tab'
+  import myTab from './myTab'
   import expiringStorage from './expiringStorage'
   import tabsStorage from './tabsStorage'
   import ModalView from '../ModalView'
 
   export default {
-    name: 'Tabs',
+    name: 'myTabs',
     props: {
       cacheLifetime: {
         default: 5,
@@ -204,7 +204,7 @@
       },
       onClick() {
         this.tabCounter++;
-        let ComponentClass = Vue.extend(Tab)
+        let ComponentClass = Vue.extend(myTab)
         let instance = new ComponentClass({
           propsData: {
             id: 'Tab'+(this.tabCounter),
@@ -224,7 +224,7 @@
       },
       createTab(id, name, code){
         this.tabCounter++;
-        let ComponentClass = Vue.extend(Tab)
+        let ComponentClass = Vue.extend(myTab)
         let instance = new ComponentClass({
           propsData: {
             id: id,

@@ -7,6 +7,8 @@
 <script>
 import PanelsBlock from './components/PanelsBlock'
 
+
+
 export default {
   name: 'App',
   components: {
