@@ -4,7 +4,7 @@
     <ul class="methodInfoLine">
       <li v-for="call in this.calls">
         <div style="width:100%" v-if="call.args.length>0">
-          <input v-for="arg in call.args" type="text" v-model="arg.value" />
+          <input v-for="arg in call.args" type="text" v-model="arg.value" :placeholder="arg.name" />
         </div>
         <button @click="callMethod(call.name)">{{call.name}}</button>
         <div v-bind:id=createID(call.name) v-model="call.response"></div>
@@ -32,7 +32,7 @@
           for(let j=0;j<this.methods[i].args.length;j++){
             let arg = {
               id:j,
-              name:this.methods[i].name + j,
+              name:this.methods[i].args[j],
               value:''
             }
             args.push(arg)

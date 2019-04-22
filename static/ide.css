@@ -19,7 +19,7 @@ a {
 }
 .h100{height: 100%}
 .h10{height: 10%}
-.h90{height: 90%}
+.h90{height: 94%}
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -50,8 +50,8 @@ div.resize-h-body {
 }
 .tabs-component-tabs{
   margin: 0;
-  padding: 1%;
-  height: 4%;
+  padding: 10px;
+  height: 15px;
 }
 .bw{
   border: 1px solid white;
@@ -99,4 +99,28 @@ div.resize-h-body {
 }
 .CodeMirror-gutters{
   z-index: 0;
+}
+.toolPanel{
+  overflow-y: auto;
+}
+.addBtn{
+  font-size: 25px;
+  background-color: lightblue;
+  width: 30px;
+  text-align: center;
+  border-radius: 10px;
+  font-weight: bold;
+  color: floralwhite;
+  cursor: pointer;
+  margin-top: -6px;
+}
+.addBtn:hover{
+  background-color: floralwhite;
+  color: lightblue;
+}
+.CodeMirror-hints{
+  max-width: 200px;
+}
+.CodeMirror-hints > .CodeMirror-hint{
+  width: 100%;
 }

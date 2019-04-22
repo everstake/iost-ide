@@ -1,11 +1,11 @@
 .custom-resizer{width:100%;height:95%}
 .custom-resizer>.pane{
   text-align: left;
-  padding: 1%;
+  padding: 5px;
   overflow: hidden;
   background: #eee;
   border: 1px solid #ccc;
-  margin: 1%;
+  margin: 5px;
   z-index: auto;
 }
 /*---------------------------------*/

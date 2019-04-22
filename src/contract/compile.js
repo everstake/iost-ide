@@ -33,6 +33,7 @@ class Compiler {
   }
 
   genAbi(def, lastPos, comments) {
+    //console.log(def)
     for (let param of def.value.params) {
       if (param.type !== "Identifier") {
         throw new Error("invalid method parameter type. must be Identifier, got " + param.type);
@@ -72,6 +73,7 @@ class Compiler {
     }
     let initFound = false;
     let lastPos = stat.body.range[0];
+
     for (let def of stat.body.body) {
       if (def.type === "MethodDefinition" && this.isPublicMethod(def)) {
         if (def.key.name === "constructor") {
@@ -219,6 +221,7 @@ class Compiler {
 
     for (let stat of ast.body) {
         if (this.isClassDecl(stat) && stat.id.type === "Identifier" && stat.id.name === className) {
+            console.log(stat)
             abiArr = this.genAbiArr(stat, ast.comments);
         }
     }
@@ -231,5 +234,4 @@ class Compiler {
     return abiStr;
   }
 }
-
 export default new Compiler()

@@ -1,7 +1,7 @@
 <template>
   <div class="tabs-component h100">
     <ul role="tablist" class="tabs-component-tabs">
-      <li @click="onClick">+</li>
+      <li @click="onClick" class="addBtn">+</li>
       <li
         v-for="(tab, i) in tabs"
         :key="i"
@@ -208,8 +208,11 @@
         let instance = new ComponentClass({
           propsData: {
             id: 'Tab'+(this.tabCounter),
-            name: 'New Tab '+(this.tabCounter),
-            code: 'my code',
+            name: 'NewContract '+(this.tabCounter),
+            code: 'class '+('NewContract'+(this.tabCounter))+' {\n' +
+              '  init() {}\n' +
+              '}\n' +
+              'module.exports = '+('NewContract'+(this.tabCounter))+';',
             modal: false
           }
         })

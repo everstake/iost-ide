@@ -1,5 +1,6 @@
 var tabsStorage = require('../components/Tabs/tabsStorage')
 var IOST = require('iost')
+var CodeResearcher = require('./codeResearcher')
 
 class Deploy{
   init(gasLimit, gasRatio){
@@ -40,13 +41,22 @@ class Deploy{
     return this.iost.signAndSend(tx)
   }
 
-  getListOfMethods(contractAccount){
+  // getListOfMethods(contractAccount){
+  //   let methodsList = []
+  //   this.rpc.getProvider().send('GET', 'getContract/'+contractAccount+'/true').then((r)=>{
+  //     for(let i=0; i<r.abis.length; i++){
+  //       methodsList.push(r.abis[i])
+  //     }
+  //   }).catch(e => {
+  //     console.log(e);
+  //   });
+  //   return methodsList
+  // }
+
+  async getMethodsArgs(contractAccount){
     let methodsList = []
-    this.rpc.getProvider().send('GET', 'getContract/'+contractAccount+'/true').then((r)=>{
-      console.log(r)
-      for(let i=0; i<r.abis.length; i++){
-        methodsList.push(r.abis[i])
-      }
+    await this.rpc.getProvider().send('GET', 'getContract/'+contractAccount+'/true').then((r)=>{
+      methodsList = CodeResearcher.default.processContract(r.code)
     }).catch(e => {
       console.log(e);
     });

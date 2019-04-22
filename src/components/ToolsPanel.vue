@@ -64,7 +64,9 @@
             console.log(pending, 'pending')
           }).on('success', (result) => {
             this.contractAccount = JSON.parse(result.returns[0])[0]
-            this.methodsList = Deploy.getListOfMethods(this.contractAccount)
+            Deploy.getMethodsArgs(this.contractAccount).then((res)=>{
+              this.methodsList = res
+            })
             this.isDeploy = true;
           }).on('failed', (failed) => {
             console.log(failed, 'failed')
@@ -82,7 +84,9 @@
       },
       atAccount() {
         if (this.contractAccount != undefined) {
-          this.methodsList = Deploy.getListOfMethods(this.contractAccount)
+          Deploy.getMethodsArgs(this.contractAccount).then((res)=>{
+            this.methodsList = res
+          })
           this.isDeploy = true;
         } else {
           this.isDeploy = false;

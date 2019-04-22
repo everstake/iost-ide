@@ -6,7 +6,7 @@
       </div>
     </div>
     <MultipaneResizer></MultipaneResizer>
-    <div class="pane" :style="{ flexGrow: 1, overflowY: auto,}">
+    <div class="pane toolPanel" :style="{ flexGrow: 1,}">
         <ToolsPanel ref="tools"></ToolsPanel>
     </div>
   </VerticalPane>
