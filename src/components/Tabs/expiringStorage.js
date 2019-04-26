@@ -28,3 +28,4 @@ class ExpiringStorage {
 }
 
 export default new ExpiringStorage()
+

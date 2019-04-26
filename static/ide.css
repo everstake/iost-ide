@@ -1,8 +1,11 @@
-body{
+body {
   width: 98%;
   height: 100%;
   position: fixed;
-  background: #2c2e31;
+  background: #585858;
+}
+*:active, *:focus {
+  outline: none !important;
 }
 h1, h2 {
   font-weight: normal;
@@ -24,6 +27,13 @@ a {
   color: #42b983;
   text-decoration: none;
 }
+.h100 { height: 100% }
+.h10 { height: 10% }
+.h90 {
+  position: relative;
+  height: 96%;
+  background: #272822;
+}
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -33,12 +43,13 @@ a {
   height: 98%;
   display: block;
 }
-.compilerBlock{
-  margin-top: 10px;
-  padding: 15px;
+#app h2 {
+  text-align: center;
+}
+.compilerBlock {
+  margin: 5px;
   overflow: hidden;
   background: rgb(60,60,60);
-  border: 1px solid #767676;
   color: #ececec;
   height: 9%;
 }
@@ -47,4 +58,170 @@ section.ide {
 }
 div.resize-h-body {
   height: 85%;
+}
+.tabs-component-panel .CodeMirror {
+  height: 100%!important;
+}
+.tabs-component-tabs {
+  margin: 0;
+  padding: 10px;
+  height: 15px;
+  background: rgb(88,88,88);
+}
+.bw {
+  margin: 0 20px;
+  border-bottom: 1px solid #747474;
+}
+.pd10 {
+  padding: 20px 10px;
+}
+.selectBox {
+  margin-top: 10px;
+  padding: 20px 10px 10px 10px;
+}
+.button-deploy {
+  margin: 0 10px;
+}
+.contract-account {
+  margin: 10px 0;
+  padding: 10px 7px;
+  width: 90%;
+  text-align: right;
+  background: #373730;
+  border: 1px solid #747474;
+  border-radius: 6px;
+  transition: .3s ease-in-out;
+}
+.contract-account:focus {
+  background: #585858;
+  color: #fff;
+}
+.contract-account::placeholder {
+  color: #b3b3b3;
+}
+.methodInfoLine {
+  margin: 0px;
+  padding: 0px;
+  list-style: none outside none;
+}
+.methodInfoLine li {
+  margin: 0;
+  padding: 5px 0;
+  width: 90%;
+}
+.methodInfoLine li button {
+  margin: 5px 0px;
+  padding: 0px;
+  float: right;
+}
+.methodInfoLine li input {
+  width: 99%;
+  margin-top: 5px;
+  display: inherit;
+  padding: 0;
+}
+.methodInfoLine li div {
+  float: left;
+  width: 100%;
+  display: inline-block;
+}
+.CodeMirror-gutters {
+  z-index: 0;
+}
+.toolPanel {
+  overflow-y: auto;
+}
+.addBtn {
+  font-size: 20px;
+  width: 30px;
+  text-align: center;
+  border-radius: 10px;
+  font-weight: bold;
+  color: #000;
+  cursor: pointer;
+  margin-top: -6px;
+}
+.CodeMirror-scroll {
+   background: #272822;
+}
+.CodeMirror-scroll .CodeMirror-gutters {
+  border: none;
+  background: none;
+}
+.CodeMirror-activeline .CodeMirror-line  span {
+  color: #fff;
+}
+.CodeMirror-activeline .CodeMirror-activeline-background {
+   background: #373831;
+}
+.CodeMirror-line span {
+  color: #b3b3b3;
+}
+.CodeMirror-gutter-wrapper .CodeMirror-linenumber {
+  padding: 0;
+}
+.CodeMirror-gutter.CodeMirror-linenumbers {
+  background: #373737;
+}
+.CodeMirror-hints {
+   max-width: 200px;
+}
+.CodeMirror-hints > .CodeMirror-hint{
+  width: 100%;
+}
+.CodeMirror-hscrollbar {
+  bottom: 5px !important;
+}
+.CodeMirror-vscrollbar {
+  right: 2px !important;
+}
+.CodeMirror-scrollbar-filler {
+  width: 0 !important;
+  height: 0 !important;
+}
+.CodeMirror-hscrollbar::-webkit-scrollbar, .CodeMirror-vscrollbar::-webkit-scrollbar {
+  margin: 10px 0;
+  background: rgb(39, 40, 34);
+  width: 7px;
+  height: 7px;
+
+}
+.CodeMirror-hscrollbar::-webkit-scrollbar-thumb, .CodeMirror-vscrollbar::-webkit-scrollbar-thumb {
+  background: rgb(90,90,90);
+  border-radius: 10px;
+}
+.compileInfo {
+  padding-top: 0;
+}
+.compileInfo label {
+  margin: 10px 0;
+  display: inline-block;
+  cursor: pointer;
+  position: relative;
+  padding-left: 25px;
+  font-size: 14px;
+  font-weight: 400;
+}
+.compileInfo input[type=checkbox] {
+  display: none;
+}
+.compileInfo label:before {
+  content: "";
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  position: absolute;
+  left: 0;
+  bottom: 1px;
+  background-color: #585858;
+  border: 1px solid #747474;
+  box-shadow: inset 0px 2px 17px 0px rgba(20, 20, 20, .3);
+  transition: .1s ease-in-out;
+}
+input[type=checkbox]:checked + label:before {
+  content: "\2713";
+  color: #fff;
+  font-size: 26px;
+  font-weight: 400;
+  line-height: 11px;
 }

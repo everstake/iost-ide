@@ -1,7 +1,7 @@
 <template>
-  <div class="tabs-component">
+  <div class="tabs-component h100">
     <ul role="tablist" class="tabs-component-tabs">
-      <li @click="onClick">+</li>
+      <li @click="onClick" class="addBtn">+</li>
       <li
         v-for="(tab, i) in tabs"
         :key="i"
@@ -14,14 +14,21 @@
            :aria-controls="tab.hash"
            :aria-selected="tab.isActive"
            @click="selectTab(tab.hash, $event)"
+           @dblclick="changeName(tab.hash)"
            :href="tab.hash"
            class="tabs-component-tab-a"
            role="tab"
         ></a>
         <span v-on:click="deleteTab(tab.hash)" class="close"></span>
+        <ModalView v-if="tab.modal"
+                   @close="tab.modal = false"
+                   :id="tab.id"
+                   :name="tab.name"
+                   :hash="tab.hash"
+        ></ModalView>
       </li>
     </ul>
-    <div id="codeList" class="tabs-component-panels">
+    <div id="codeList" class="tabs-component-panels h90">
       <slot/>
     </div>
   </div>
@@ -29,11 +36,13 @@
 
 <script>
   import Vue from 'vue'
-  import Tab from './Tab'
+  import myTab from './myTab'
   import expiringStorage from './expiringStorage'
+  import tabsStorage from './tabsStorage'
+  import ModalView from '../ModalView'
 
   export default {
-    name: 'Tabs',
+    name: 'myTabs',
     props: {
       cacheLifetime: {
         default: 5,
@@ -57,10 +66,10 @@
     computed: {
       storageKey() {
         return `vue-tabs-component.cache.${window.location.host}${window.location.pathname}`;
-      },
+      }
     },
     created() {
-      this.tabs = this.$children;
+
     },
     mounted() {
       window.addEventListener('hashchange', () => this.selectTab(window.location.hash));
@@ -80,6 +89,16 @@
       if (this.tabs.length) {
         this.selectTab(this.tabs[0].hash);
       }
+      if(document.getElementById('codeList') != undefined){
+        let tabsHashes = tabsStorage.getArray()
+        if(tabsHashes != null)
+        {
+          for (let i=0;i<tabsHashes.length;i++){
+            let hash = '#'+tabsHashes[i];
+            this.createTab(tabsStorage.get(hash, 'id'), tabsStorage.get(hash, 'name'), tabsStorage.get(hash, 'code'))
+          }
+        }
+      }
     },
     methods: {
       findTab(hash) {
@@ -92,11 +111,13 @@
             if (localStorage.getItem(this.tabs[i].hash)) {
                 localStorage.removeItem(this.tabs[i].hash)
             }
+            tabsStorage.removeToArray((this.tabs[i].hash).replace('#',''))
             this.tabs.splice(i, 1)
           }
         }
       },
       selectTab(selectedTabHash, event) {
+
         // See if we should store the hash in the url fragment.
         if (event && !this.options.useUrlFragment) {
           event.preventDefault();
@@ -121,6 +142,25 @@
         this.activeTabIndex = this.getTabIndex(selectedTabHash);
         this.lastActiveTabHash = this.activeTabHash = selectedTab.hash;
         expiringStorage.set(this.storageKey, selectedTab.hash, this.cacheLifetime);
+
+        //change list of tabs
+        // let select = document.getElementById('contracts-list')
+        // if(select != null){
+        //   for(let i=0;i<select.options.length;i++) {
+        //     if(select.options[i].value == selectedTab.hash){
+        //       select.options.selectedIndex = i
+        //     }
+        //   }
+        // }
+
+      },
+      changeName(selectedTabHash) {
+        for(let i=0;i<this.tabs.length;i++)
+        {
+          if(this.tabs[i].hash == selectedTabHash){
+            this.tabs[i].modal = true
+          }
+        }
       },
       setTabVisible(hash, visible) {
         const tab = this.findTab(hash);
@@ -164,12 +204,16 @@
       },
       onClick() {
         this.tabCounter++;
-        let ComponentClass = Vue.extend(Tab)
+        let ComponentClass = Vue.extend(myTab)
         let instance = new ComponentClass({
           propsData: {
             id: 'Tab'+(this.tabCounter),
-            name: 'New Tab '+(this.tabCounter),
-            code: 'my code'
+            name: 'NewContract '+(this.tabCounter),
+            code: 'class '+('NewContract'+(this.tabCounter))+' {\n' +
+              '  init() {}\n' +
+              '}\n' +
+              'module.exports = '+('NewContract'+(this.tabCounter))+';',
+            modal: false
           }
         })
         let el = instance.$mount()
@@ -177,7 +221,31 @@
         this.tabs.push(instance)
         instance.$mount()
         this.selectTab(instance.hash)
+
+        tabsStorage.set(instance.hash, {'id': instance.id,'name': instance.name, 'code':instance.code, modal:false})
+        tabsStorage.addToArray(instance.hash.replace('#',''))
+      },
+      createTab(id, name, code){
+        this.tabCounter++;
+        let ComponentClass = Vue.extend(myTab)
+        let instance = new ComponentClass({
+          propsData: {
+            id: id,
+            name: name,
+            code: code,
+            modal: false
+          }
+        })
+
+        let el = instance.$mount()
+        this.tabs.push(instance)
+        instance.$mount()
+        document.getElementById('codeList').appendChild(el.$el)
+        this.selectTab(instance.hash)
       }
+    },
+    components: {
+      ModalView
     }
   };
 </script>

@@ -1,0 +1,97 @@
+.btn-group {
+  min-width: 160px;
+  height: 40px;
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+}
+.btn-group a:hover {
+  text-decoration: none;
+}
+.dropdown-toggle {
+  margin: 0;
+  padding: 10px;
+  color: #b3b3b3;
+  min-width: 160px;
+  text-transform: none;
+  font-weight: 400;
+  font-size: 16px;
+  background-size: 0 2px, 100% 1px;
+  background-repeat: no-repeat;
+  background-position: center bottom, center calc(100% - 1px);
+  background-color: transparent;
+  transition: background 0s ease-out;
+  float: none;
+  box-shadow: none;
+  border: 1px solid #747474;
+  border-radius: 6px;
+  transition: .3s ease-in-out;
+}
+.dropdown-toggle:hover {
+  background: #585858;
+  color: #fff;
+  cursor: pointer;
+}
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  float: none;
+  min-width: 160px;
+  width: 99%;
+  margin: 2px 0 0;
+  list-style: none;
+  font-size: 14px;
+  text-align: center;
+  background-color: #585858;
+  border: 1px solid #727272;
+  border-radius: 4px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+  background-clip: padding-box;
+}
+.dropdown-menu > li > a {
+  padding: 10px 30px;
+  display: block;
+  clear: both;
+  font-weight: normal;
+  line-height: 1.6;
+  color: #b3b3b3;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: .2s ease-in-out;
+}
+.dropdown-menu > li > a:hover {
+  background: #212121;
+  color: #fff;
+}
+.dropdown-menu > li:first-child > a {
+  border-radius: 4px 4px 0 0;
+}
+.dropdown-menu > li:last-child > a {
+  border-radius: 0 0 4px 4px;
+}
+.dropdown-menu > li {
+  display: block;
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+  margin: 0;
+}
+.caret {
+  display: inherit;
+  width: 0;
+  position: relative;
+  top: 7px;
+  height: 0;
+  margin-left: 2px;
+  vertical-align: middle;
+  border-top: 4px dashed;
+  border-top: 4px solid \9;
+  border-right: 4px solid transparent;
+  border-left: 4px solid transparent;
+  float: right;
+}
+li {
+  list-style: none;
+}

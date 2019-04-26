@@ -1,8 +1,9 @@
 <template>
-  <codemirror :code="contractCode" :options="options"  @input="onCmInput" ></codemirror>
+  <codemirror class="h100" :code="contractCode" :options="options"  @input="onCmInput" ></codemirror>
 </template>
 
 <script>
+  import tabsStorage from './Tabs/tabsStorage'
   import 'codemirror/lib/codemirror.css'
   // import 'codemirror/theme/monokai.css'
 
@@ -11,40 +12,45 @@
   // theme css
   import 'codemirror/theme/monokai.css'
   // require active-line.js
-  import'codemirror/addon/selection/active-line.js'
+  import 'codemirror/addon/selection/active-line.js'
   // styleSelectedText
-  import'codemirror/addon/selection/mark-selection.js'
-  import'codemirror/addon/search/searchcursor.js'
+  import 'codemirror/addon/selection/mark-selection.js'
+  import 'codemirror/addon/search/searchcursor.js'
   // hint
-  import'codemirror/addon/hint/show-hint.js'
-  import'codemirror/addon/hint/show-hint.css'
-  import'codemirror/addon/hint/javascript-hint.js'
-  import'codemirror/addon/selection/active-line.js'
+  // import'codemirror/addon/hint/show-hint.css'
+  import 'codemirror/addon/hint/javascript-hint.js'
+  // import 'codemirror/addon/selection/active-line.js'
   // highlightSelectionMatches
-  import'codemirror/addon/scroll/annotatescrollbar.js'
-  import'codemirror/addon/search/matchesonscrollbar.js'
-  import'codemirror/addon/search/searchcursor.js'
-  import'codemirror/addon/search/match-highlighter.js'
-  // keyMap
-  import'codemirror/mode/clike/clike.js'
-  import'codemirror/addon/edit/matchbrackets.js'
-  import'codemirror/addon/comment/comment.js'
-  import'codemirror/addon/dialog/dialog.js'
-  import'codemirror/addon/dialog/dialog.css'
-  import'codemirror/addon/search/searchcursor.js'
-  import'codemirror/addon/search/search.js'
-  import'codemirror/keymap/sublime.js'
-  // foldGutter
-  import'codemirror/addon/fold/foldgutter.css'
-  import'codemirror/addon/fold/brace-fold.js'
-  import'codemirror/addon/fold/comment-fold.js'
-  import'codemirror/addon/fold/foldcode.js'
-  import'codemirror/addon/fold/foldgutter.js'
-  import'codemirror/addon/fold/indent-fold.js'
-  import'codemirror/addon/fold/markdown-fold.js'
-  import'codemirror/addon/fold/xml-fold.js'
+  import 'codemirror/addon/scroll/annotatescrollbar.js'
 
-  import { codemirror } from "vue-codemirror"
+  import 'codemirror/addon/search/matchesonscrollbar.js'
+  import 'codemirror/addon/search/searchcursor.js'
+  import 'codemirror/addon/search/match-highlighter.js'
+
+  // keyMap
+  import 'codemirror/mode/clike/clike.js'
+  import 'codemirror/addon/edit/matchbrackets.js'
+  import 'codemirror/addon/comment/comment.js'
+  import 'codemirror/addon/dialog/dialog.js'
+  import 'codemirror/addon/dialog/dialog.css'
+  import 'codemirror/addon/search/searchcursor.js'
+  import 'codemirror/addon/search/search.js'
+  import 'codemirror/keymap/sublime.js'
+
+  // foldGutter
+  // import'codemirror/addon/fold/foldgutter.css'
+  // import'codemirror/addon/fold/brace-fold.js'
+  // import'codemirror/addon/fold/comment-fold.js'
+  // import'codemirror/addon/fold/foldcode.js'
+  // import'codemirror/addon/fold/foldgutter.js'
+  // import'codemirror/addon/fold/indent-fold.js'
+  // import'codemirror/addon/fold/markdown-fold.js'
+  // import'codemirror/addon/fold/xml-fold.js'
+
+  //import { codemirror } from "vue-codemirror"
+  import codemirror from "./codemirror/codemirror"
+
+  import HintJS from '../code/javascript-hint'
   export default {
     name: 'ContractCode',
     props: ['contractCode', 'tabHash'],
@@ -53,17 +59,25 @@
         code: this.contractCode,
         options: {
           tabSize: 4,
-          styleActiveLine: false,
+          styleActiveLine: true,
           lineNumbers: true,
-          styleSelectedText: false,
+          styleSelectedText: true,
           line: true,
           foldGutter: true,
+          //fixedGutter:true,
           gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
           highlightSelectionMatches: {showToken: /\w/, annotateScrollbar: true},
           mode: 'text/javascript',
-          // hint.js options
+          allowDropFileTypes:['javascript'],
+          // hintOptions: {
+          //   completeSingle: false,
+          //   //customKeys: ['days', 'did'],
+          //   extraKeys: ['days', 'boys']
+          // },
           hintOptions: {
-            completeSingle: false
+            hint: function(cm, callback) {
+              return HintJS.javascriptHint(cm, callback)
+            }
           },
           keyMap: "sublime",
           matchBrackets: true,
@@ -75,9 +89,18 @@
     },
     methods: {
       onCmInput(newCode) {
-        //const parsed = JSON.stringify(newCode);
-        localStorage.setItem(this.tabHash, newCode);
-        console.log(localStorage.getItem(this.tabHash))
+        tabsStorage.setCode(this.tabHash, newCode)
+        localStorage.setItem('compiledCode', null)
+        let select = document.getElementById('contracts-list')
+        if(select!= null){
+          for(let i=0;i<select.options.length;i++) {
+            if(select.options[i].value == this.tabHash)
+              select.options.selectedIndex = i
+          }
+        }
+
+        if(document.getElementById('checkbox').checked)
+          document.querySelector('.button-compile').click()
       }
     },
     components: {

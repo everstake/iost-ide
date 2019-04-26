@@ -1,5 +1,7 @@
 .toolsBlock {
   text-align: center;
+  font-size: 18px;
+  font-weight: 600;
   color: #fff;
 }
 .toolsBlock button {
@@ -7,15 +9,19 @@
   padding: 10px 0;
   min-width: 175px;
   display: block;
-  background: #212121;
-  border: none;
+  background: transparent;
   outline: none;
-  border-radius: 5px;
-  color: #ececec;
+  border: 1px solid #747474;
+  border-radius: 6px;
+  color: #b3b3b3;
   cursor: pointer;
   transition: .3s ease-in-out;
 }
 .toolsBlock button:hover {
-  background: #000;
+  background: #585858;
   color: #fff;
+}
+.toolsBlock span {
+  font-size: 14px;
+  font-weight: 400;
 }
