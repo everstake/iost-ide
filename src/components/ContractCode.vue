@@ -92,7 +92,7 @@
         tabsStorage.setCode(this.tabHash, newCode)
         localStorage.setItem('compiledCode', null)
         let select = document.getElementById('contracts-list')
-        if(select!= null){
+        if(select!= null) {
           for(let i=0;i<select.options.length;i++) {
             if(select.options[i].value == this.tabHash)
               select.options.selectedIndex = i
