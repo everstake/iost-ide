@@ -88,7 +88,6 @@ class HintJS {
       else if (obj instanceof Function) forEach(funcProps, maybeAdd);
       forAllProps(obj, maybeAdd)
     }
-
     if (context && context.length) {
       // If this is a property, see if it belongs to some object we can
       // find in the current environment.
@@ -127,19 +126,22 @@ class HintJS {
         maybeAdd(line.handle.localThisVars[v])
       }
     }
-    for (let v = 0; v<line.handle.localVars.length; v++){
-      maybeAdd(line.handle.localVars[v])
+    if(line.handle.localVars.length>0){
+      for (let v = 0; v<line.handle.localVars.length; v++){
+        maybeAdd(line.handle.localVars[v])
+      }
     }
+
     return found;
   }
 
   scriptHint(editor, keywords, getToken, options) {
+
     // Find the token at the cursor
     let cur = editor.getCursor();
     let token = getToken(editor, cur);
     let line = editor.lineInfo(cur.line);
     let text = editor.getLine(cur.line);
-    console.log(line)
     if (/\b(?:string|comment)\b/.test(token.type)) return;
     var innerMode = CodeMirror.innerMode(editor.getMode(), token.state);
     if (innerMode.mode.helperType === "json") return;
@@ -177,19 +179,6 @@ class HintJS {
       to: this.Pos(cur.line, token.end)};
   }
 
-  isInString(str, symbols) {
-    console.log(str)
-    console.log(symbols)
-    if(str.indexOf(symbols[0]) >=0 || str.indexOf(symbols[1]) >=0){
-      return true
-    }
-    return false
-  }
-
-  puredStr(str){
-    return str.replace(/\s+/g, '');
-  }
-
   isThisInLine(str){
     if(str.indexOf('this.') >= 0){
       return true
@@ -214,6 +203,15 @@ class HintJS {
   isCloseBlockInLine(line){
     if(line.text.indexOf(closeBlockSign) >= 0){
       return true
+    }
+    return false
+  }
+
+  isVarsKeys(line){
+    for(var i=0;i<varsKey.length;i++){
+      if(line.text.indexOf(varsKey[i]) >= 0){
+        return true
+      }
     }
     return false
   }
@@ -304,18 +302,36 @@ class HintJS {
         for (let i=0; i<asDefaults.length;i++){
           str = str.replace((asDefaults[i].slice(0, -1)),'')
         }
-        var args = str.split('(').pop().split(')');
+        let args = str.split('(').pop().split(')');
         return args[0].split(',')
       }
     }
     return false
   }
 
+  getVars(str){
+    if(!this.isFor(str)){
+      let vstr = []
+      let regex = new RegExp("([var|let|const])([a-zA-Z0-9\\s]{0,})([=|,|;|\\n])", "g");
+      let asDefaults = str.match(regex);
+      if(asDefaults !== undefined && asDefaults != null){
+        for (let i=0; i<asDefaults.length;i++){
+          let str = asDefaults[i];
+          let keys = ("var let const = ; , \n").split(" ")
+          for(let i=0;i<keys.length;i++){
+            str = str.replace(keys[i],"")
+          }
+          vstr.push(str.trim())
+        }
+      }
+      return vstr
+    }
+  }
+
   addVarsToBlock(lines, lineNumber, vars){
     let info = this.getBlockInfo(lines, lineNumber)
     if(info.start!=undefined && info.end!=undefined){
       while (info.start != info.end) {
-        lines[info.start].localVars = []
         for(let i=0;i<vars.length;i++)
           lines[info.start].localVars.push(vars[i])
         info.start++
@@ -357,15 +373,27 @@ class HintJS {
   }
 
   createBlockTree(lines){
-    let blockTree = []
+    let currentBlockinfo = []
     for(let i=0;i<lines.length;i++){
+
       if(lines[i].blockInfo !== undefined){
+        currentBlockinfo = lines[i].blockInfo
         let children = this.getChildren(lines, lines[i].blockInfo)
         if(children != undefined && children.length>0){
           lines[i].childrenBlock = children
         }
         let parent = this.getParent(lines, lines[i].blockInfo)
         lines[i].parentBlock = parent
+      }
+      else {
+        lines[i].insideBlockInfo = currentBlockinfo
+      }
+      //add var in line if exist
+      if(this.isVarsKeys(lines[i])){
+        let v = this.getVars(lines[i].text)
+        if(v!=undefined && v.length>0){
+          this.addVarToLine(lines[lines[i].insideBlockInfo.start], v)
+        }
       }
     }
   }
@@ -379,6 +407,7 @@ class HintJS {
        }
       }
     }
+    return childrenBlock
   }
 
   getParent(lines, info){
@@ -392,7 +421,7 @@ class HintJS {
   }
 
   getBlockInfo(lines, lineNumber){
-    let start=0, end=0;
+    let start, end=0;
     if(lines[lineNumber] != undefined){
       if(lines[lineNumber].blockInfo != undefined){
         start = lines[lineNumber].blockInfo.start
@@ -443,29 +472,50 @@ class HintJS {
     }
   }
 
-  addVarsToBlocks(lines){
-
+  addVarToLine(line, items){
+    for(let i=0;i<items.length;i++){
+      if(!line.localVars.includes(items[i]))
+        line.localVars.push(items[i])
+    }
   }
 
-  setGlobalVars(codeLines){
-    let varsArray = [];
-    //console.log(typesVars().class)
-    for (let i=0;i<codeLines.length;i++){
-      let lines = codeLines[i].lines
-      this.setBlockes(lines);
-      this.setOperators(lines);
-      this.setOperatorsInClass(lines);
-      this.setArgsInLines(lines);
-      this.createBlockTree(lines);
-      this.addVarsToBlocks();
-      for(let j=0;j<lines.length;j++){
+  addVarsToBlocks(lines){
+    for(let i=0;i<lines.length;i++){
+      if(lines[i].insideBlockInfo !== undefined) {
+        let block = lines[lines[i].insideBlockInfo.start]
+        while (true){
+          if(block.localVars !== undefined && block.localVars.length>0) {
+            this.addVarToLine(lines[i], block.localVars)
+          }
+          if(block.parentBlock == undefined)
+            break
+          else{
+            block = lines[block.parentBlock.start]
+          }
+        }
 
       }
     }
   }
 
-  javascriptHint(editor, options) {
+  setGlobalVars(codeLines){
+    let varsArray = [];
+    for (let i=0;i<codeLines.length;i++){
+      let lines = codeLines[i].lines
+      for(let j=0;j<lines.length;j++){
+        lines[j].localThisVars = [];
+        lines[j].localVars = [];
+      }
+      this.setBlockes(lines);
+      this.createBlockTree(lines);
+      this.setOperators(lines);
+      this.setOperatorsInClass(lines);
+      this.setArgsInLines(lines);
+      this.addVarsToBlocks(lines);
+    }
+  }
 
+  javascriptHint(editor, options) {
     if(editor!=undefined && editor.doc != undefined && editor.doc.children)
       this.setGlobalVars(editor.doc.children);
     return this.scriptHint(editor, javascriptKeywords,
