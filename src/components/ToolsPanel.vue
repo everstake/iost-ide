@@ -1,6 +1,6 @@
 <template>
   <div class="toolsBlock">
-    <div class="bw pd10">
+    <div class="bw pd10 tools-title">
       <WalletInfo></WalletInfo>
     </div>
 

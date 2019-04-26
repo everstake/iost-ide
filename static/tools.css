@@ -1,8 +1,5 @@
 .toolsBlock {
   text-align: center;
-  font-size: 18px;
-  font-weight: 600;
-  color: #fff;
 }
 .toolsBlock button {
   margin: 10px auto;
@@ -24,4 +21,21 @@
 .toolsBlock span {
   font-size: 14px;
   font-weight: 400;
+}
+.toolsBlock a {
+  color: #fff;
+  text-decoration: underline;
+  transition: .3s ease-in-out;
+}
+.toolsBlock a:hover {
+  color: #b3b3b3;
+}
+.tools-title div {
+  font-size: 14px;
+  font-weight: 400;
+}
+.tools-title div:first-child {
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
 }
