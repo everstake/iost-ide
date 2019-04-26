@@ -51,7 +51,7 @@ a {
   overflow: hidden;
   background: rgb(60,60,60);
   color: #ececec;
-  height: 9%;
+  height: 50%;
 }
 section.ide {
   height: 100%;
@@ -61,6 +61,9 @@ div.resize-h-body {
 }
 .tabs-component-panel .CodeMirror {
   height: 100%!important;
+}
+.compilerBlock .CodeMirror{
+  height: 755px;
 }
 .tabs-component-tabs {
   margin: 0;

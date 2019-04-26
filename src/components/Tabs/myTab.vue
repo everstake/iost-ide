@@ -4,6 +4,7 @@
            class="tabs-component-panel h100"
            :id="computedId"
            role="tabpanel"
+           v-on:click=""
   >
     <div class="h100">
       <ContractCode :tabHash="this.hash" :contractCode="this.code" ></ContractCode>

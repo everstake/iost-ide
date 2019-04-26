@@ -1,5 +1,5 @@
 <template>
-  <codemirror class="h100" :code="contractCode" :options="options"  @input="onCmInput" ></codemirror>
+  <codemirror class="h100" :code="contractCode" :options="options"  @input="onCmInput" @focus="onCmFocus"></codemirror>
 </template>
 
 <script>
@@ -69,11 +69,6 @@
           highlightSelectionMatches: {showToken: /\w/, annotateScrollbar: true},
           mode: 'text/javascript',
           allowDropFileTypes:['javascript'],
-          // hintOptions: {
-          //   completeSingle: false,
-          //   //customKeys: ['days', 'did'],
-          //   extraKeys: ['days', 'boys']
-          // },
           hintOptions: {
             hint: function(cm, callback) {
               return HintJS.javascriptHint(cm, callback)
@@ -101,7 +96,10 @@
 
         if(document.getElementById('checkbox').checked)
           document.querySelector('.button-compile').click()
-      }
+      },
+      onCmFocus(cm) {
+        console.log('the editor is focus!', cm)
+      },
     },
     components: {
       codemirror

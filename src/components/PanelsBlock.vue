@@ -1,11 +1,11 @@
 <template>
   <section class="ide">
     <HorizontalPane>
-      <div class="resize-h-body h-pane" :style="{minHeight:'60%', maxHeight: '90%' }">
+      <div class="resize-h-body h-pane" :style="{minHeight:'20%', maxHeight: '100%' }">
         <MainPanel></MainPanel>
       </div>
       <MultipaneResizer></MultipaneResizer>
-      <div class="h-pane" :style="{ flexGrow: 1, maxHeight: '15%', minHeight: '5%' }">
+      <div class="h-pane" :style="{ flexGrow: 1, maxHeight: '50%', minHeight: '75%' }">
         <CompilerPanel ref="compiler"></CompilerPanel>
       </div>
     </HorizontalPane>

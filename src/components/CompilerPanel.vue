@@ -48,7 +48,6 @@ import'codemirror/addon/fold/xml-fold.js'
 import { codemirror } from "vue-codemirror"
 export default {
   name: 'CompilerPanel',
-
   data ()
   {
     return {

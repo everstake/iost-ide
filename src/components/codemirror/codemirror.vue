@@ -166,6 +166,7 @@
         element && element.remove && element.remove()
       },
       handerCodeChange(newVal) {
+
         const cm_value = this.cminstance.getValue()
         if (newVal !== cm_value) {
           const scrollInfo = this.cminstance.getScrollInfo()

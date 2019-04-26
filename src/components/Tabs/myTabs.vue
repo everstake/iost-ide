@@ -117,7 +117,6 @@
         }
       },
       selectTab(selectedTabHash, event) {
-
         // See if we should store the hash in the url fragment.
         if (event && !this.options.useUrlFragment) {
           event.preventDefault();
@@ -142,6 +141,8 @@
         this.activeTabIndex = this.getTabIndex(selectedTabHash);
         this.lastActiveTabHash = this.activeTabHash = selectedTab.hash;
         expiringStorage.set(this.storageKey, selectedTab.hash, this.cacheLifetime);
+        // this.findTab(selectedTabHash).$el.getElementsByClassName('CodeMirror')[0].children[0].click();
+        // console.log(this.findTab(selectedTabHash).$children[0].$children[0].$emit('focus'))
 
         //change list of tabs
         // let select = document.getElementById('contracts-list')
@@ -209,10 +210,13 @@
           propsData: {
             id: 'Tab'+(this.tabCounter),
             name: 'NewContract '+(this.tabCounter),
-            code: 'class '+('NewContract'+(this.tabCounter))+' {\n' +
+            code: 'class HelloWorld {\n' +
               '  init() {}\n' +
+              'hello(someone) {\n' +
+              '        return "hello, "+ someone\n' +
+              '    }\n'+
               '}\n' +
-              'module.exports = '+('NewContract'+(this.tabCounter))+';',
+              'module.exports = HelloWorld;',
             modal: false
           }
         })
