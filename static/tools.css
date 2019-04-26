@@ -1,7 +1,27 @@
-.toolsBlock{
+.toolsBlock {
   text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
 }
 .toolsBlock button {
-  margin: auto;
+  margin: 10px auto;
+  padding: 10px 0;
+  min-width: 175px;
   display: block;
+  background: transparent;
+  outline: none;
+  border: 1px solid #747474;
+  border-radius: 6px;
+  color: #b3b3b3;
+  cursor: pointer;
+  transition: .3s ease-in-out;
+}
+.toolsBlock button:hover {
+  background: #585858;
+  color: #fff;
+}
+.toolsBlock span {
+  font-size: 14px;
+  font-weight: 400;
 }
