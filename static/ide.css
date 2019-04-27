@@ -204,6 +204,7 @@ div.resize-h-body {
   padding-left: 25px;
   font-size: 14px;
   font-weight: 400;
+  color: #fff;
 }
 .compileInfo input[type=checkbox] {
   display: none;
