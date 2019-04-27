@@ -1,7 +1,7 @@
 <template>
   <section class="ide">
     <HorizontalPane>
-      <div class="resize-h-body h-pane" :style="{minHeight:'30%', maxHeight: 'calc(100% - 300px)' }">
+      <div class="resize-h-body h-pane" :style="{minHeight:'20%', maxHeight: '100%' }">
         <MainPanel></MainPanel>
       </div>
       <MultipaneResizer></MultipaneResizer>

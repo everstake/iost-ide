@@ -229,3 +229,23 @@ input[type=checkbox]:checked + label:before {
   font-weight: 400;
   line-height: 11px;
 }
+.compileData{
+  padding: 10px 10px;
+  display: inline-block;
+  width: 80%;
+}
+.compileData .button-abi{
+  margin: 5px auto;
+  min-width: 100px;
+  float: left;
+}
+.compileData .button-copy{
+  float: right;
+  vertical-align: middle;
+  padding: 15px;
+  cursor: pointer;
+  color: whitesmoke;
+}
+.compileData .button-copy:hover{
+
+}

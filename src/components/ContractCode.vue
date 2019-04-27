@@ -1,5 +1,11 @@
 <template>
-  <codemirror class="h100" :code="contractCode" :options="options"  @input="onCmInput" @focus="onCmFocus"></codemirror>
+  <codemirror class="h100"
+              ref="codemirror"
+              :code="contractCode"
+              :options="options"
+              @input="onCmInput"
+              @focus="onCmFocus">
+  </codemirror>
 </template>
 
 <script>
@@ -98,7 +104,7 @@
           document.querySelector('.button-compile').click()
       },
       onCmFocus(cm) {
-        console.log('the editor is focus!', cm)
+        //console.log('the editor is focus!', cm)
       },
     },
     components: {
