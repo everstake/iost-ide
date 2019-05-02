@@ -64,6 +64,7 @@ div.resize-h-body {
 }
 .compilerBlock .CodeMirror{
   height: 755px;
+  text-align: left;
 }
 .tabs-component-tabs {
   margin: 0;
