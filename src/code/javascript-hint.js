@@ -299,8 +299,10 @@ class HintJS {
       } else {
         let regex = new RegExp("=[a-zA-Z0-9]{0,}[,|\\)]", "g");
         let asDefaults = str.match(regex);
-        for (let i=0; i<asDefaults.length;i++){
-          str = str.replace((asDefaults[i].slice(0, -1)),'')
+        if(asDefaults != null){
+          for (let i=0; i<asDefaults.length;i++){
+            str = str.replace((asDefaults[i].slice(0, -1)),'')
+          }
         }
         let args = str.split('(').pop().split(')');
         return args[0].split(',')
