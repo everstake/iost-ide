@@ -1,6 +1,6 @@
 <template>
   <div class="toolsBlock">
-    <div class="bw pd10">
+    <div class="bw pd10 tools-title">
       <WalletInfo></WalletInfo>
     </div>
 
@@ -9,6 +9,17 @@
     <div class="bw pd10 compileInfo">
       <input type="checkbox" id="checkbox" v-model="checked"><label for="checkbox">Auto compile</label>
       <button @click="compile" class="button-compile">Compile Smart Contract</button>
+    </div>
+
+    <div class="bw pd10 compileData" v-if="copyAbiData!==null">
+      <button @click="showAbi" class="button-abi">show ABI</button>
+      <span v-clipboard="copyAbiData"
+            @success="handleSuccess"
+            @error="handleError"
+            class="button-copy">Copy</span>
+      <ModalAbiView
+        v-if="compileModal"
+        @close="compileModal = false"></ModalAbiView>
     </div>
 
     <div class="bw pd10 mt10">
@@ -36,6 +47,8 @@
   import Compiler from '../contract/compile'
   import Deploy from '../contract/deploy'
 
+  import ModalAbiView from './ModalAbiView'
+
   export default {
     name: 'ToolsPanel',
     data() {
@@ -46,17 +59,43 @@
         methodsList: [],
         showMethods: false,
         isCompiled:true,
-        isDeploy:false
+        isDeploy:false,
+        copyAbiData:null,
+        compileModal:false
       }
     },
     mounted(){
       Deploy.init(1437936, 1)
     },
     methods: {
+      handleSuccess(e) {
+        console.log(e);
+      },
+      handleError(e) {
+        console.log(e);
+      },
+      showAbi() {
+        console.log(1)
+        this.compileModal=true
+      },
+      selectText(element) {
+        var range;
+        if (document.selection) {
+          // IE
+          range = document.body.createTextRange();
+          range.moveToElementText(element);
+          range.select();
+        } else if (window.getSelection) {
+          range = document.createRange();
+          range.selectNode(element);
+          window.getSelection().removeAllRanges();
+          window.getSelection().addRange(range);
+        }
+      },
       deploy() {
         if(!Deploy.isConnect())
         {
-          this.$parent.$parent.$parent.$parent.$refs.compiler.code = 'Error! Please, connect iWallet to your browser!'
+          this.$parent.$parent.$parent.$parent.$refs.compiler.code += '\nError! Please, connect iWallet to your browser!'
           return false
         }
         if ((this.fileHash == this.$refs.sel.object.value && (localStorage.getItem('compiledCode') != '') && tabsStorage.get(this.fileHash,'code') != undefined)) {
@@ -71,13 +110,13 @@
           }).on('failed', (failed) => {
             console.log(failed, 'failed')
             console.log(failed.message)
-            this.$parent.$parent.$parent.$parent.$refs.compiler.code = 'Error! Contract '+this.$refs.sel.object.name+' cant be deployed ('+failed.message+')'
+            this.$parent.$parent.$parent.$parent.$refs.compiler.code += '\nError! Contract '+this.$refs.sel.object.name+' cant be deployed ('+failed.message+')'
             this.isDeploy = false;
           })
         } else {
           console.log('Errror!')
           if(this.$refs.sel.object.value == null)
-            this.$parent.$parent.$parent.$parent.$refs.compiler.code = 'Error! Choose contract for deploying!'
+            this.$parent.$parent.$parent.$parent.$refs.compiler.code += '\nError! Choose contract for deploying!'
           if(localStorage.getItem('compiledCode') == '')
             this.$parent.$parent.$parent.$parent.$refs.compiler.code += '\nError! Choose contract for deploying!'
         }
@@ -101,11 +140,12 @@
               let res = Compiler.processContract(fText)
               if(res.length > 0) {
                 localStorage.setItem('compiledCode', res)
-                this.$parent.$parent.$parent.$parent.$refs.compiler.code = 'Contract '+this.$refs.sel.object.name+' compiled successfully'
+                this.copyAbiData=res
+                this.$parent.$parent.$parent.$parent.$refs.compiler.code += '\nContract '+this.$refs.sel.object.name+' compiled successfully'
                 this.isCompiled = true
               }
             } catch (e) {
-              this.$parent.$parent.$parent.$parent.$refs.compiler.code = e.message
+              this.$parent.$parent.$parent.$parent.$refs.compiler.code += '\n'+e.message
             }
           }
         }
@@ -128,16 +168,8 @@
     components: {
       WalletInfo,
       SelectContract,
-      ContractMethodsList
+      ContractMethodsList,
+      ModalAbiView
     }
   }
-  /*
-  * ram_usage:
-Contract393FDvLQ56sY4fakjdLjfMznb4yG8g2RvD7snVfWX3Gm: "119"
-iostgcoin: "658"
-__proto__: Object
-receipts: []
-returns: ["["ContractBDcHFuuKEZKcbWkhjQaQ8ycxDa7eaNjtSQoj45Aj2QaQ"]"]
-status_code: "SUCCESS"
-  * */
 </script>

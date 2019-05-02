@@ -5,7 +5,7 @@
     <div>{{amount}} IOST</div>
     <div>iRAM:{{iRAM}} iGAS:{{iGAS}}</div>
   </div>
-  <div v-else>Please logIn to iWallet!</div>
+  <div v-else>Please logIn to <a href="https://chrome.google.com/webstore/detail/iwallet/kncchdigobghenbbaddojjnnaogfppfj" target="_blank">iWallet!</a></div>
 </template>
 <script>
   import IOST from 'iost'

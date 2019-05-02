@@ -61,11 +61,11 @@ export default {
         keyMap: "sublime",
         mode: 'text/x-vue',
         theme: 'base16-light',
-        extraKeys: {"Ctrl": "autocomplete"}
+        extraKeys: {"Ctrl": "autocomplete"},
+        readOnly: true
       }
     }
   },
-
   components: {
     codemirror
   }

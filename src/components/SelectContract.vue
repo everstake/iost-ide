@@ -1,6 +1,10 @@
 <template>
   <div class="selectBox">
-    <dropdown :options="arrayOfObjects" :selected="object" v-on:updateOption="methodToRunOnSelect"></dropdown>
+    <dropdown ref="dd-contract-list"
+              :options="arrayOfObjects"
+              :selected="object"
+              v-on:updateOption="methodToRunOnSelect"
+    ></dropdown>
   </div>
 </template>
 <script>
@@ -31,15 +35,15 @@
         return `vue-tabs-component.cache.${window.location.host}${window.location.pathname}`;
       },
       arrayOfObjects: function(){
-        let t = []
-        let hashList = tabsStorage.getArray()
-        for(let i=0;i<hashList.length;i++) {
-          t.push({
-            name:tabsStorage.get('#'+hashList[i],'name'),
-            value:'#'+hashList[i],
+        let tabs = this.$parent.$parent.$children[1].tabs;
+        let opts = []
+        for(let i=0;i<tabs.length;i++) {
+          opts.push({
+            name:tabs[i].name,
+            value:tabs[i].hash,
           })
         }
-        return t
+        return opts
       }
     },
     methods: {
@@ -47,7 +51,7 @@
           this.object = e;
           document.querySelectorAll("a[href='"+e.value+"']")[0].click()
           this.$parent.changeFile(e.value)
-        }
+      }
     },
     components: {
       'dropdown': dropdown,

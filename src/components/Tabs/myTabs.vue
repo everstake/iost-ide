@@ -105,7 +105,7 @@
         return this.tabs.find(tab => tab.hash === hash);
       },
       deleteTab(selectedTabHash){
-        for(var i=0; i<this.tabs.length; i++) {
+        for(let i=0; i<this.tabs.length; i++) {
           if(this.tabs[i].hash == selectedTabHash) {
             document.getElementById(this.tabs[i].id).remove()
             if (localStorage.getItem(this.tabs[i].hash)) {
@@ -113,6 +113,16 @@
             }
             tabsStorage.removeToArray((this.tabs[i].hash).replace('#',''))
             this.tabs.splice(i, 1)
+
+            //make this tab active
+            if(this.tabs.length > 0){
+              if(i>0 && this.tabs[i-1].hash !== undefined){
+                this.selectTab(this.tabs[i-1].hash)
+              }
+              else if(i<this.tabs.length && this.tabs[i+1].hash !== undefined){
+                this.selectTab(this.tabs[i+1].hash)
+              }
+            }
           }
         }
       },
@@ -141,8 +151,7 @@
         this.activeTabIndex = this.getTabIndex(selectedTabHash);
         this.lastActiveTabHash = this.activeTabHash = selectedTab.hash;
         expiringStorage.set(this.storageKey, selectedTab.hash, this.cacheLifetime);
-        // this.findTab(selectedTabHash).$el.getElementsByClassName('CodeMirror')[0].children[0].click();
-        // console.log(this.findTab(selectedTabHash).$children[0].$children[0].$emit('focus'))
+        this.findTab(selectedTabHash).$children[0].$refs.codemirror.refresh()
 
         //change list of tabs
         // let select = document.getElementById('contracts-list')
