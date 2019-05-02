@@ -221,7 +221,7 @@ class Compiler {
 
     for (let stat of ast.body) {
         if (this.isClassDecl(stat) && stat.id.type === "Identifier" && stat.id.name === className) {
-            console.log(stat)
+           // console.log(stat)
             abiArr = this.genAbiArr(stat, ast.comments);
         }
     }
@@ -231,7 +231,7 @@ class Compiler {
     abi['version'] = this.version;
     abi['abi'] = abiArr;
     let abiStr = JSON.stringify(abi, null, 0);
-    return abiStr;
+    return abiStr
   }
 }
 export default new Compiler()

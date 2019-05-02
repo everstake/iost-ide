@@ -58,7 +58,8 @@ class Deploy{
     await this.rpc.getProvider().send('GET', 'getContract/'+contractAccount+'/true').then((r)=>{
       methodsList = CodeResearcher.default.processContract(r.code)
     }).catch(e => {
-      console.log(e);
+      console.log(e)
+      return false
     });
     return methodsList
   }

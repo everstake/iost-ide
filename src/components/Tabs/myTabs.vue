@@ -113,9 +113,8 @@
             }
             tabsStorage.removeToArray((this.tabs[i].hash).replace('#',''))
             this.tabs.splice(i, 1)
-
             //make this tab active
-            if(this.tabs.length > 0){
+            if(this.tabs.length > 0 && this.tabs[i-1] !== undefined){
               if(i>0 && this.tabs[i-1].hash !== undefined){
                 this.selectTab(this.tabs[i-1].hash)
               }
@@ -123,6 +122,7 @@
                 this.selectTab(this.tabs[i+1].hash)
               }
             }
+
           }
         }
       },

@@ -9,6 +9,7 @@
     <div class="bw pd10 compileInfo">
       <input type="checkbox" id="checkbox" v-model="checked"><label for="checkbox">Auto compile</label>
       <button @click="compile" class="button-compile">Compile Smart Contract</button>
+      <button @click="compileAuto" style="display: none" class="hidden-button-compile"></button>
     </div>
 
     <div class="bw pd10 compileData" v-if="copyAbiData!==null">
@@ -48,7 +49,7 @@
   import Deploy from '../contract/deploy'
 
   import ModalAbiView from './ModalAbiView'
-
+  const autoError = null
   export default {
     name: 'ToolsPanel',
     data() {
@@ -68,6 +69,32 @@
       Deploy.init(1437936, 1)
     },
     methods: {
+      currentTime(){
+        let d = new Date();
+        var h=d.getHours(),m=d.getMinutes(),l="AM";
+        if(h > 12){
+          h = h - 12;
+        }
+        if(h < 10){
+          h = '0'+h;
+        }
+        if(m < 10){
+          m = '0'+m;
+        }
+        if(d.getHours() >= 12){
+          l="PM"
+        }else{
+          l="AM"
+        }
+
+        return h+':'+m+':'+d.getSeconds()+' '+l;
+      },
+      toConsole(ref, text){
+        let code = ''
+        if(ref.$parent.$parent.$parent.$parent.$refs.compiler.code.length>0)
+          code = ref.$parent.$parent.$parent.$parent.$refs.compiler.code
+        ref.$parent.$parent.$parent.$parent.$refs.compiler.code = text + '\n' + code
+      },
       handleSuccess(e) {
         console.log(e);
       },
@@ -75,7 +102,6 @@
         console.log(e);
       },
       showAbi() {
-        console.log(1)
         this.compileModal=true
       },
       selectText(element) {
@@ -95,38 +121,60 @@
       deploy() {
         if(!Deploy.isConnect())
         {
-          this.$parent.$parent.$parent.$parent.$refs.compiler.code += '\nError! Please, connect iWallet to your browser!'
+          this.toConsole(this,'Error! Please, connect iWallet to your browser!')
           return false
         }
         if ((this.fileHash == this.$refs.sel.object.value && (localStorage.getItem('compiledCode') != '') && tabsStorage.get(this.fileHash,'code') != undefined)) {
           Deploy.createContract(this.fileHash).on('pending', (pending) => {
-            console.log(pending, 'pending')
+            this.toConsole(this, '-------------------------------------------')
+            this.toConsole(this,'Pending! Contract '+this.$refs.sel.object.name+' has address ('+pending+')')
+            this.toConsole(this, '-------------------------------------------')
           }).on('success', (result) => {
             this.contractAccount = JSON.parse(result.returns[0])[0]
             Deploy.getMethodsArgs(this.contractAccount).then((res)=>{
               this.methodsList = res
             })
             this.isDeploy = true;
+
+            let ram = 0, igas = 0;
+            if(result.ram_usage.iostgcoin != undefined)
+              ram = result.ram_usage.iostgcoin
+            if(result.gas_usage !== undefined)
+              igas = result.gas_usage
+
+            this.toConsole(this, 'Ram used:'+ram)
+            this.toConsole(this, 'iGas used:'+igas)
+            this.toConsole(this, 'Contract hash:'+result.returns[0])
+            this.toConsole(this, 'Tx hash:'+result.tx_hash)
+            this.toConsole(this, 'Response status:'+result.status_code)
+            this.toConsole(this, '--------------------Create contract at time '+this.currentTime() +'--------------------')
+
           }).on('failed', (failed) => {
-            console.log(failed, 'failed')
-            console.log(failed.message)
-            this.$parent.$parent.$parent.$parent.$refs.compiler.code += '\nError! Contract '+this.$refs.sel.object.name+' cant be deployed ('+failed.message+')'
+            if(failed.message !== undefined)
+              this.toConsole(this, 'Error! Contract '+this.$refs.sel.object.name+' cant be deployed ('+failed.message+')')
+            else
+              this.toConsole(this, 'Error! Contract '+this.$refs.sel.object.name+' cant be deployed ('+failed+')')
             this.isDeploy = false;
           })
         } else {
-          console.log('Errror!')
           if(this.$refs.sel.object.value == null)
-            this.$parent.$parent.$parent.$parent.$refs.compiler.code += '\nError! Choose contract for deploying!'
+            this.toConsole(this, 'Error! Choose contract for deploying!')
           if(localStorage.getItem('compiledCode') == '')
-            this.$parent.$parent.$parent.$parent.$refs.compiler.code += '\nError! Choose contract for deploying!'
+            this.toConsole(this, 'Error! Choose contract for deploying!')
         }
       },
       atAccount() {
         if (this.contractAccount != undefined) {
           Deploy.getMethodsArgs(this.contractAccount).then((res)=>{
-            this.methodsList = res
+            if(res == false){
+              this.isDeploy = false
+              this.toConsole(this, 'Error! Contract '+this.contractAccount+' cant be deployed (contract not found)')
+            }
+            else{
+              this.methodsList = res
+              this.isDeploy = true;
+            }
           })
-          this.isDeploy = true;
         } else {
           this.isDeploy = false;
         }
@@ -141,11 +189,36 @@
               if(res.length > 0) {
                 localStorage.setItem('compiledCode', res)
                 this.copyAbiData=res
-                this.$parent.$parent.$parent.$parent.$refs.compiler.code += '\nContract '+this.$refs.sel.object.name+' compiled successfully'
+                this.toConsole(this, 'Contract '+this.$refs.sel.object.name+' compiled successfully')
                 this.isCompiled = true
               }
             } catch (e) {
-              this.$parent.$parent.$parent.$parent.$refs.compiler.code += '\n'+e.message
+              this.toConsole(this, e.message)
+            }
+          }
+        }
+      },
+      compileAuto(){
+        this.fileHash = this.$refs.sel.object.value
+        if(tabsStorage.is(this.fileHash)) {
+          let fText = tabsStorage.get(this.fileHash, 'code')
+          if(fText != undefined) {
+            try {
+              let res = Compiler.processContract(fText)
+              if(res.length > 0) {
+                localStorage.setItem('compiledCode', res)
+                this.copyAbiData=res
+                this.isCompiled = true
+                if(this.autoError != 'success'){
+                  this.autoError = 'success'
+                  this.toConsole(this, 'Contract '+this.$refs.sel.object.name+' compiled successfully')
+                }
+              }
+            } catch (e) {
+              if(e.message != this.autoError){
+                this.toConsole(this, e.message)
+                this.autoError = e.message
+              }
             }
           }
         }

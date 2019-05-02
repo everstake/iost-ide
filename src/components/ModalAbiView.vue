@@ -1,7 +1,7 @@
 <template>
   <div class="modal-mask" >
     <div class="modal-wrapper">
-      <div class="modal-container" @click="">
+      <div class="abiView" @click="">
 
         <div class="modal-header">
           <slot name="header">
@@ -11,11 +11,8 @@
         <div class="modal-body">
           <slot name="body">
             <textarea>{{abiCode}}</textarea>
-            <button class="modal-default-button" @click="saveAbi()">
-              OK
-            </button>
             <button class="modal-default-button" @click="$emit('close')">
-              Close
+              OK
             </button>
           </slot>
         </div>
@@ -44,13 +41,14 @@
     computed: {
     },
     mounted() {
-      this.abiCode = localStorage.getItem('compiledCode')
+      let compiledCode = JSON.parse(localStorage.getItem('compiledCode'))
+      if(compiledCode !== null){
+        this.abiCode = JSON.stringify(compiledCode, null, "\t")
+      }
+      else
+        this.abiCode = '';
     },
     methods: {
-      saveAbi(){
-        this.$emit('close')
-      }
-
     }
   };
 </script>

@@ -55,7 +55,7 @@
 
   //import { codemirror } from "vue-codemirror"
   import codemirror from "./codemirror/codemirror"
-
+  let intervalId = null;
   import HintJS from '../code/javascript-hint'
   export default {
     name: 'ContractCode',
@@ -100,8 +100,21 @@
           }
         }
 
-        if(document.getElementById('checkbox').checked)
-          document.querySelector('.button-compile').click()
+        if(document.getElementById('checkbox').checked && intervalId == null){
+            this.autoCompile()
+        }
+      },
+      autoCompile(){
+        const self = this
+        if(document.getElementById('checkbox').checked){
+          intervalId = setTimeout(function(){
+            document.querySelector('.hidden-button-compile').click()
+            self.autoCompile()
+          }, 3000);
+        }
+        else {
+          intervalId = null;
+        }
       },
       onCmFocus(cm) {
         //console.log('the editor is focus!', cm)
