@@ -13,7 +13,7 @@
     </div>
 
     <div class="bw pd10 compileData" v-if="copyAbiData!==null">
-      <button @click="showAbi" class="button-abi">show ABI</button>
+      <button @click="showAbi" class="button-abi">Show ABI</button>
       <span v-clipboard="copyAbiData"
             @success="handleSuccess"
             @error="handleError"
@@ -23,7 +23,7 @@
         @close="compileModal = false"></ModalAbiView>
     </div>
 
-    <div class="bw pd10 mt10">
+    <div class="pd10 mt10">
       <button @click="deploy" class="button-deploy">Deploy Smart Contract</button>
     </div>
 
@@ -87,13 +87,12 @@
           l="AM"
         }
 
-        return h+':'+m+':'+d.getSeconds()+' '+l;
+        return '['+h+':'+m+':'+d.getSeconds()+' '+l+'] ';
       },
       toConsole(ref, text){
-        let code = ''
-        if(ref.$parent.$parent.$parent.$parent.$refs.compiler.code.length>0)
-          code = ref.$parent.$parent.$parent.$parent.$refs.compiler.code
-        ref.$parent.$parent.$parent.$parent.$refs.compiler.code = text + '\n' + code
+        let line = '________________________________________________________________________'
+        ref.$parent.$parent.$parent.$parent.$refs.compiler.code += '\n'+ line + '\n\n' + this.currentTime()+text + '\n' + '\n'
+        this.$parent.$parent.$parent.$parent.$refs.compiler.setCursor(this.$parent.$parent.$parent.$parent.$refs.compiler.$children[0].cminstance)
       },
       handleSuccess(e) {
         console.log(e);
@@ -126,12 +125,10 @@
         }
         if ((this.fileHash == this.$refs.sel.object.value && (localStorage.getItem('compiledCode') != '') && tabsStorage.get(this.fileHash,'code') != undefined)) {
           Deploy.createContract(this.fileHash).on('pending', (pending) => {
-            this.toConsole(this, '-------------------------------------------')
-            this.toConsole(this,'Pending! Contract '+this.$refs.sel.object.name+' has address ('+pending+')')
-            this.toConsole(this, '-------------------------------------------')
+            this.toConsole(this,'Pending! Contract '+this.$refs.sel.object.name+' has address '+pending)
           }).on('success', (result) => {
             this.contractAccount = JSON.parse(result.returns[0])[0]
-            Deploy.getMethodsArgs(this.contractAccount).then((res)=>{
+            Deploy.getMethodsArgs(this.contractAccount).then((res) => {
               this.methodsList = res
             })
             this.isDeploy = true;
@@ -142,12 +139,12 @@
             if(result.gas_usage !== undefined)
               igas = result.gas_usage
 
-            this.toConsole(this, 'Ram used:'+ram)
-            this.toConsole(this, 'iGas used:'+igas)
-            this.toConsole(this, 'Contract hash:'+result.returns[0])
-            this.toConsole(this, 'Tx hash:'+result.tx_hash)
-            this.toConsole(this, 'Response status:'+result.status_code)
-            this.toConsole(this, '--------------------Create contract at time '+this.currentTime() +'--------------------')
+            let block = '\nResponse status:'+result.status_code + '\n'
+            block += 'Tx hash:'+result.tx_hash + '\n'
+            block += 'Contract hash:Contract'+result.tx_hash + '\n'
+            block += 'iGAS used:'+igas + '\n'
+            block += 'iRAM used:'+ram
+            this.toConsole(this, block)
 
           }).on('failed', (failed) => {
             if(failed.message !== undefined)

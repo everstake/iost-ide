@@ -1,6 +1,9 @@
 <template>
   <div class="compilerBlock">
-    <codemirror :code="code" :options="optionsCompile" ></codemirror>
+    <codemirror :code="code"
+                :options="optionsCompile"
+                @focus="onCmFocus"
+    ></codemirror>
   </div>
 </template>
 
@@ -56,7 +59,6 @@ export default {
         tabSize: 4,
         foldGutter: true,
         styleActiveLine: true,
-        lineNumbers: true,
         line: true,
         keyMap: "sublime",
         mode: 'text/x-vue',
@@ -64,6 +66,17 @@ export default {
         extraKeys: {"Ctrl": "autocomplete"},
         readOnly: true
       }
+    }
+  },
+  methods: {
+    onCmFocus(cm) {
+      // console.log('the editor is focus!', cm)
+      // cm.setCursor(cm.lineCount(), 1)
+    },
+    setCursor(cm){
+      setTimeout(function(){
+        cm.setCursor(cm.lineCount(), 1)
+      }, 400);
     }
   },
   components: {

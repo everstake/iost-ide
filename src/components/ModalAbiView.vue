@@ -10,8 +10,15 @@
 
         <div class="modal-body">
           <slot name="body">
-            <textarea>{{abiCode}}</textarea>
-            <button class="modal-default-button" @click="$emit('close')">
+            <textarea readonly="readonly">{{abiCode}}</textarea>
+            <button class="modal-default-button fl"
+                    v-clipboard="copyAbiData"
+                    @success="handleSuccess"
+                    @error="handleError"
+                    @click="copyData()">
+              Copy
+            </button>
+            <button class="modal-default-button fr" @click="$emit('close')">
               OK
             </button>
           </slot>
@@ -35,6 +42,7 @@
     },
     data(){
       return {
+        copyAbiData:0,
         abiCode:''
       }
     },
@@ -44,11 +52,24 @@
       let compiledCode = JSON.parse(localStorage.getItem('compiledCode'))
       if(compiledCode !== null){
         this.abiCode = JSON.stringify(compiledCode, null, "\t")
+        this.copyAbiData = this.abiCode
       }
       else
         this.abiCode = '';
     },
     methods: {
+      handleSuccess(e) {
+        console.log(e);
+      },
+      handleError(e) {
+        console.log(e);
+      },
+      copyData(){
+        let self = this
+        setTimeout(function(){
+          self.$emit('close')
+        }, 400);
+      }
     }
   };
 </script>

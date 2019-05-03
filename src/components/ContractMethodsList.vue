@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="contract-line" :title=this.contractID>
-      <span style="">{{this.contractID}}</span>
+      <span style="">{{this.contractID.slice(0,16)+'...'}}</span>
       <span v-clipboard="this.copyAddress"
             @success="handleSuccess"
             @error="handleError"
@@ -60,11 +60,11 @@
       },
       callMethod(methodName){
         function toConsole(ref, text){
-          let code = ''
-          if(ref.$parent.$parent.$parent.$parent.$parent.$refs.compiler.code.length>0)
-            code = ref.$parent.$parent.$parent.$parent.$parent.$refs.compiler.code
-          ref.$parent.$parent.$parent.$parent.$parent.$refs.compiler.code = text + '\n' + code
+          let line = '___________________________________________________________________________'
+          ref.$parent.$parent.$parent.$parent.$parent.$refs.compiler.code += '\n'+ line + '\n\n' + currentTime()+text + '\n' + line +'\n'
+          ref.$parent.$parent.$parent.$parent.$parent.$refs.compiler.setCursor(ref.$parent.$parent.$parent.$parent.$parent.$refs.compiler.$children[0].cminstance)
         }
+
         function currentTime(){
           let d = new Date();
           var h=d.getHours(),m=d.getMinutes(),l="AM";
@@ -83,9 +83,9 @@
             l="AM"
           }
 
-          return h+':'+m+':'+d.getSeconds()+' '+l;
-          //return date.getHours() + ":" + date.getMinutes()+":"+date.getSeconds()
+          return '['+h+':'+m+':'+d.getSeconds()+' '+l+'] ';
         }
+
         for(let i=0;i<this.calls.length;i++) {
           if(this.calls[i].name == methodName) {
             let methodArgs = []
@@ -95,9 +95,7 @@
             Deploy.callContract(this.contractID, methodName, methodArgs).on('pending', (pending) => {
               this.calls[i].response = 'pending ...'
 
-              toConsole(this, '-------------------------------------------')
-              toConsole(this, methodName+' is pending tx_hash:'+pending)
-              toConsole(this, '-------------------------------------------')
+              toConsole(this, 'Calling '+methodName+'() is pending tx_hash:'+pending)
 
               //this.$parent.$parent.$parent.$parent.$parent.$refs.compiler.code += '\n'+methodName+' is pending tx_hash:'+pending;
               document.getElementById(this.createID(methodName)).innerHTML = this.calls[i].response
@@ -112,11 +110,15 @@
               if(result.gas_usage !== undefined)
                 igas = result.gas_usage
 
-              toConsole(this, 'Ram used:'+ram)
-              toConsole(this, 'iGas used:'+igas)
-              toConsole(this, 'Tx hash:'+result.tx_hash)
-              toConsole(this, 'Response status:'+result.status_code)
-              toConsole(this, '--------------------CallMethod:'+methodName+' at time '+currentTime() +'--------------------')
+              // console.log(result)
+
+              let block = 'Result of called method '+methodName+'()'
+              block += '\nResponse status:'+result.status_code + '\n'
+              block += 'Response:['+JSON.parse(result.returns[0]) + ']\n'
+              block += 'Tx hash:'+result.tx_hash + '\n'
+              block += 'iGAS used:'+igas + '\n'
+              block += 'iRAM used:'+ram
+              toConsole(this, block)
               return result
             }).on('failed', (failed) => {
               if(failed.message !== undefined){

@@ -221,9 +221,9 @@
             name: 'NewContract '+(this.tabCounter),
             code: 'class HelloWorld {\n' +
               '  init() {}\n' +
-              'hello(someone) {\n' +
-              '        return "hello, "+ someone\n' +
-              '    }\n'+
+              '  hello(someone) {\n' +
+              '     return "hello, "+ someone\n' +
+              '  }\n'+
               '}\n' +
               'module.exports = HelloWorld;',
             modal: false

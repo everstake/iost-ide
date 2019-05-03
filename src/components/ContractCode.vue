@@ -55,7 +55,10 @@
 
   //import { codemirror } from "vue-codemirror"
   import codemirror from "./codemirror/codemirror"
-  let intervalId = null;
+  let compilateIntervalId = null;
+  let saveIntervalId = null;
+  let keyPressed = 10;
+  let keyPressedCounter = 10;
   import HintJS from '../code/javascript-hint'
   export default {
     name: 'ContractCode',
@@ -90,7 +93,9 @@
     },
     methods: {
       onCmInput(newCode) {
-        tabsStorage.setCode(this.tabHash, newCode)
+        if(document.getElementById('checkbox').checked)
+          keyPressed = 10;
+        keyPressedCounter =10;
         localStorage.setItem('compiledCode', null)
         let select = document.getElementById('contracts-list')
         if(select!= null) {
@@ -100,24 +105,49 @@
           }
         }
 
-        if(document.getElementById('checkbox').checked && intervalId == null){
+        if(saveIntervalId == null) {
+          this.autoSave(newCode)
+        }
+
+        if(document.getElementById('checkbox').checked && compilateIntervalId == null){
             this.autoCompile()
+        }
+      },
+      autoSave(newCode){
+        const self = this
+        if(keyPressedCounter<=0) {
+          saveIntervalId = setTimeout(function(){
+            saveIntervalId = null;
+            tabsStorage.setCode(this.tabHash, newCode)
+          }, 1000);
+        } else {
+          saveIntervalId = setTimeout(function(){
+            keyPressedCounter--
+            self.autoSave()
+          }, 500);
         }
       },
       autoCompile(){
         const self = this
-        if(document.getElementById('checkbox').checked){
-          intervalId = setTimeout(function(){
-            document.querySelector('.hidden-button-compile').click()
+        if(keyPressed<=0) {
+          if(document.getElementById('checkbox').checked){
+            compilateIntervalId = setTimeout(function(){
+              compilateIntervalId = null;
+              document.querySelector('.hidden-button-compile').click()
+            }, 1000);
+          } else {
+            compilateIntervalId = null;
+          }
+        } else {
+          compilateIntervalId = setTimeout(function(){
+            keyPressed--
             self.autoCompile()
-          }, 3000);
-        }
-        else {
-          intervalId = null;
+          }, 500);
         }
       },
       onCmFocus(cm) {
-        //console.log('the editor is focus!', cm)
+        // console.log('the editor is focus!', cm)
+        // cm.setCursor(cm.lineCount(), 0)
       },
     },
     components: {

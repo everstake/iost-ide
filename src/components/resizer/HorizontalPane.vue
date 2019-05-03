@@ -26,20 +26,23 @@
           let { $el: container, layout } = self
 
           let pane = resizer.previousElementSibling
+          let nextPane = resizer.nextElementSibling
+
 
           let {
             offsetWidth: initialPaneWidth,
             offsetHeight: initialPaneHeight
           } = pane
 
-          let usePercentage = !!(pane.style.width + '').match('%')
+
+          let usePercentage = !!(pane.style.height + '').match('%')
 
           const { addEventListener, removeEventListener } = window
 
           const resize = (initialSize, offset = 0) => {
               let containerHeight = container.clientHeight
               let paneHeight = initialSize + offset
-
+              nextPane.style.height =100 - (paneHeight / containerHeight * 100) + '%'
               return (pane.style.height = usePercentage
                 ? paneHeight / containerHeight * 100 + '%'
                 : paneHeight + 'px')
@@ -57,6 +60,7 @@
           const onMouseMove = function ({ pageX, pageY }) {
             size = resize(initialPaneHeight, pageY - initialPageY)
             self.$emit('paneResize', pane, resizer, size)
+            //self.$emit('paneResize', nextPane, resizer, size)
           }
 
           const onMouseUp = function () {
