@@ -16,7 +16,7 @@
                     @success="handleSuccess"
                     @error="handleError"
                     @click="copyData()">
-              Copy
+              <font-awesome-icon icon="copy" /> Copy
             </button>
             <button class="modal-default-button fr" @click="$emit('close')">
               OK
@@ -59,10 +59,10 @@
     },
     methods: {
       handleSuccess(e) {
-        console.log(e);
+        //console.log(e);
       },
       handleError(e) {
-        console.log(e);
+        //console.log(e);
       },
       copyData(){
         let self = this

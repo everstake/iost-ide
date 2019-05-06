@@ -1,8 +1,14 @@
 <template>
   <div v-if="iwalletLogIn">
-    <div>{{network}}</div>
-    <div>{{account}}</div>
-    <div>{{amount}} IOST</div>
+    <div>
+      <span>{{network}}</span>
+    </div>
+    <div>
+      <span>{{account}}</span>
+    </div>
+    <div>
+      <span>{{amount}} IOST</span>
+    </div>
     <div>iRAM:{{iRAM}} iGAS:{{iGAS}}</div>
   </div>
   <div v-else>Please logIn to <a href="https://chrome.google.com/webstore/detail/iwallet/kncchdigobghenbbaddojjnnaogfppfj" target="_blank">iWallet!</a></div>

@@ -214,9 +214,8 @@ div.resize-h-body {
   cursor: pointer;
   position: relative;
   padding-left: 25px;
-  font-size: 14px;
   font-weight: 400;
-  color: #fff;
+  color: #b3b3b3;
 }
 .compileInfo input[type=checkbox] {
   display: none;
@@ -244,7 +243,7 @@ input[type=checkbox]:checked + label:before {
 .compileData{
   padding: 10px 10px;
   display: inline-block;
-  width: 80%;
+  width: 100%;
 }
 .compileData .button-abi{
   margin: 5px auto;
@@ -256,10 +255,10 @@ input[type=checkbox]:checked + label:before {
   vertical-align: middle;
   padding: 15px;
   cursor: pointer;
-  color: whitesmoke;
+  color: #b3b3b3;
 }
 .compileData .button-copy:hover{
-
+  color: #fff;
 }
 
 .abiView{
@@ -297,8 +296,7 @@ input[type=checkbox]:checked + label:before {
   width: 100%;
 }
 .contract-line{
-
-  color: whitesmoke;
+  color: #b3b3b3;
   overflow-x: hidden;
 }
 .contract-line span{
@@ -307,11 +305,14 @@ input[type=checkbox]:checked + label:before {
   float: left;
   overflow: hidden;
 }
+.contract-line span:hover{
+  color: #fff;
+}
 .contract-line .address{
   float: left;
   overflow: hidden;
   width: 91%;
 }
 .call-response{
-  color: whitesmoke;
+  color: #b3b3b3;
 }

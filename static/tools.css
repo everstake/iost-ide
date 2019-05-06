@@ -1,5 +1,7 @@
 .toolsBlock {
   text-align: center;
+  font-size: 14px;
+  font-weight: 400;
 }
 .toolsBlock button {
   margin: 5px auto;
@@ -33,9 +35,10 @@
 .tools-title div {
   font-size: 14px;
   font-weight: 400;
+  color: #b3b3b3;
 }
-.tools-title div:first-child {
-  font-size: 18px;
+.tools-title div:first-child>span{
+  font-size: 16px;
   font-weight: 600;
-  color: #fff;
+  color: #b3b3b3;
 }

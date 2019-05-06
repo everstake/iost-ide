@@ -17,7 +17,9 @@
       <span v-clipboard="copyAbiData"
             @success="handleSuccess"
             @error="handleError"
-            class="button-copy">Copy</span>
+            class="button-copy">
+        <font-awesome-icon icon="copy" />
+        Copy</span>
       <ModalAbiView
         v-if="compileModal"
         @close="compileModal = false"></ModalAbiView>
@@ -28,7 +30,7 @@
     </div>
 
     <div class="bw pd10 mt10">
-      <button @click="atAccount" class="button-deploy">Deploy from account</button>
+      <button @click="atAccount" class="button-deploy"><font-awesome-icon icon="file-import" /> Deploy from account</button>
       <input type="text" class="contract-account" v-model="contractAccount" placeholder="Address">
     </div>
 

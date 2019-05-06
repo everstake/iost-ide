@@ -14,8 +14,6 @@
   color: #b3b3b3;
   min-width: 160px;
   text-transform: none;
-  font-weight: 400;
-  font-size: 16px;
   background-size: 0 2px, 100% 1px;
   background-repeat: no-repeat;
   background-position: center bottom, center calc(100% - 1px);

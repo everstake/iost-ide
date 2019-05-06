@@ -5,7 +5,9 @@
       <span v-clipboard="this.copyAddress"
             @success="handleSuccess"
             @error="handleError"
-            class="button-copy">Copy</span>
+            class="button-copy">
+        <font-awesome-icon icon="copy" />
+        Copy</span>
     </div>
     <ul class="methodInfoLine">
       <li v-for="call in this.calls">
